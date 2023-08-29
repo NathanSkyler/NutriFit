@@ -8,6 +8,7 @@ def calculate_age(birthdate): #incomplete
 def calculate_calorie_intake(user_stats): #incomplete - account of imperial and metric system
         weight_kg = user_stats.weight
         height_cm = user_stats.height 
+        print(f"height is{type(height_cm)}")
         age_years = calculate_age(user_stats.bday)
 
         if user_stats.gender == "Male":
@@ -17,10 +18,10 @@ def calculate_calorie_intake(user_stats): #incomplete - account of imperial and 
 
         activity_level_multiplier = {
         "sedentary": 1.2,
-        "lightly_active": 1.375,
-        "moderately_active": 1.55,
-        "very_active": 1.725,
-        "extra_active": 1.9 }
+        "lightly active": 1.375,
+        "moderately active": 1.55,
+        "very active": 1.725,
+        "extra active": 1.9 }
         
         activity_level = user_stats.activity_level.lower()
         calorie_intake = base_calories * activity_level_multiplier[activity_level]

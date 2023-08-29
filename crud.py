@@ -1,5 +1,5 @@
 from model import db, Users, UserStats, Meals, SavedMeals, connect_to_db
-from datetime import date
+from datetime import date, datetime
 from stats_calculations import calculate_calorie_intake, calculate_protein_intake, calculate_carb_intake, calculate_fat_intake
 
 def commiting(data):
@@ -33,6 +33,10 @@ def get_stats_by_stats_id(stats_id):
     stats = db.session.query(UserStats).filter(UserStats.stats_id == stats_id).first()
     return stats
 
+def get_user_stats_by_user_id(user_id):
+    user_stats = db.session.query(UserStats).filter(UserStats.user_id == user_id).first()
+    return user_stats
+
 def get_user_by_email(email):
     return Users.query.filter(Users.email == email).first()
 
@@ -40,8 +44,8 @@ def get_user_by_id(user_id):
     return Users.query.filter(Users.user_id == user_id).first()
 
 def create_user_stats(user_id, bday, height, weight, gender, activity_level, fit_goal, weight_goal):
-    bday = date(*map(int, bday.split("-")))
-    new_stats = UserStats(user_id=user_id, bday=bday, height=height, weight=weight, gender=gender,
+    bday_date = datetime.strptime(bday, "%Y-%m-%d").date()
+    new_stats = UserStats(user_id=user_id, bday=bday_date, height=height, weight=weight, gender=gender,
                             activity_level=activity_level, fit_goal=fit_goal, weight_goal=weight_goal)
     assign_intake_values(new_stats)
     commiting(new_stats)
