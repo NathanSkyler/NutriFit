@@ -22,6 +22,9 @@ def get_recipes_api(dict, meal_type):
         'maxCarbs': {dict[2][1]},
         'minFat': {dict[3][0]},
         'maxFat': {dict[3][1]},
+        'addRecipeInformation': True,
+        'instructionsRequired': True,
+        'fillIngredients': True,
         'number': 6
     }
 
@@ -32,14 +35,19 @@ def get_recipes_api(dict, meal_type):
 def format_recipe(api_response):
     formatted_recipes = []
 
-    print(api_response)
+    # print(api_response)
 
     for recipe in api_response["results"]:
         title = recipe["title"]
         image_url = recipe["image"]
         nutrients = recipe["nutrition"]["nutrients"]
         nutrient_info = {}
- 
+        recipe_summary = recipe["summary"]
+        # instructions = recipe["analyzedInstructions"][0]['steps']
+        ingredients = recipe["extendedIngredients"]
+
+        if "analyzedInstructions" in recipe and recipe["analyzedInstructions"]:
+            instructions = recipe["analyzedInstructions"][0].get('steps', 'Not Available')
 
         for nutrient in nutrients:
             nutrient_name = nutrient["name"]
@@ -52,7 +60,10 @@ def format_recipe(api_response):
             "Calories": nutrient_info.get("Calories", "N/A"),
             "Protein": nutrient_info.get("Protein", "N/A"),
             "Carbohydrates": nutrient_info.get("Carbohydrates", "N/A"),
-            "Fat": nutrient_info.get("Fat", "N/A")
+            "Fat": nutrient_info.get("Fat", "N/A"),
+            "RecipeSummary": recipe_summary,
+            "Instructions": instructions,
+            "Ingredients": ingredients
         }
 
         formatted_recipes.append(formatted_recipe)

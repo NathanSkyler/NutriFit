@@ -320,8 +320,6 @@ function StatsForm({fetchStats}) {
     const [pace, setPace] = useState("");
     const [bdayholder, setBdayHolder] = useState("MM/DD/YYYY");
 
-
-
     const handleSubmit = (evt) => {
         evt.preventDefault();
         // console.log("Form Data2:", formData)
