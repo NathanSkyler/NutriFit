@@ -1,8 +1,10 @@
 from flask import Flask
-from flask import (Flask, render_template, request, flash, session, redirect)
+from flask import (Flask, render_template, request, flash, session, redirect, jsonify)
 from model import connect_to_db, db
 import crud
 from jinja2 import StrictUndefined
+from stats_calculations import calculate_percent_range
+from spoonacular import get_recipes_api, format_recipe
 
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -75,12 +77,61 @@ def update_stats():
     fit_goal = request.json.get("fit_goal")
     weight_goal = request.json.get("weight_goal")
     user_id = crud.get_user_by_email(session["email"])
-    print(user_id.user_id)
-    # user_id = session.get("user_id")
-    # user_stats = crud.get_user_stats_by_user_id(user_id)
 
-    crud.create_user_stats(user_id.user_id, bday, height, weight, gender, activity_level, fit_goal, weight_goal)
+
+
+    user_stats = crud.get_user_stats_by_user_id(user_id.user_id)
+    if user_stats:
+        crud.update_user_stats(user_stats.stats_id, bday, height, weight, gender, activity_level, weight_goal, fit_goal)
+    else:
+        crud.create_user_stats(user_id.user_id, bday, height, weight, gender, activity_level, weight_goal, fit_goal)
+    
     return {"success": True}
+
+@app.route('/get_stats')
+def get_stats():
+        user = crud.get_user_by_email(session["email"])
+        user_stats = crud.get_user_stats_by_user_id(user.user_id)
+
+        if user_stats:
+            user_stats_dict = {
+                "calorie_intake": user_stats.calorie_intake,
+                "protein_intake": user_stats.protein_intake,
+                "carbs_intake": user_stats.carbs_intake,
+                "fat_intake": user_stats.fat_intake
+            }
+            print(user_stats_dict,"new test ")
+
+        response = jsonify(user_stats_dict)
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        return response
+
+@app.route('/get_recipes')
+def get_recipes():
+        user = crud.get_user_by_email(session["email"])
+        user_stats = crud.get_user_stats_by_user_id(user.user_id)
+
+        if user_stats:
+            percent_range = calculate_percent_range(user_stats.calorie_intake,
+                                    user_stats.protein_intake, 
+                                    user_stats.carbs_intake, 
+                                    user_stats.fat_intake)
+
+            breakfast_recipes = get_recipes_api(percent_range['breakfast'], 'breakfast')
+            # lunch_recipes = get_recipes_api(percent_range['lunch'], 'main course')
+            # dinner_recipes = get_recipes_api(percent_range['dinner'], 'main course')
+            # snack_recipes = get_recipes_api(percent_range['snack'], 'snack')
+
+            breakfast_recipes_format = format_recipe(breakfast_recipes)
+            # lunch_recipes_format = format_recipe(lunch_recipes)
+            # dinner_recipes_format = format_recipe(dinner_recipes)
+            # snack_recipes_format = format_recipe(snack_recipes)
+
+            return jsonify(breakfast_recipes_format)
+        else:
+            pass
+
+
 if __name__ == "__main__":
     connect_to_db(app)
     app.run(

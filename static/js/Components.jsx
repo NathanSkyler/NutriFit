@@ -116,7 +116,24 @@ function LoginPage(props) {
 
 function HomePage() {
 
-    
+
+    const [userStats, setUserStats] = useState({});
+
+    useEffect(() => {
+        fetch("/get_stats")
+            .then((response) => response.json())
+            .then((data) => {
+                setUserStats(data);
+            });
+    }, []);
+
+    const fetchUserStats = () => {
+        fetch("/get_stats")
+            .then((response) => response.json())
+            .then((data) => {
+                setUserStats(data);
+            });
+    };
 
     return (
         <React.Fragment>
@@ -257,14 +274,20 @@ function HomePage() {
                 </div>
                 <div className="cards">
                     <div className="row">
-                        <Card value="3000 cal" label="Calorie Budget" />
-                        <Card value="300g" label="Protein" />
-                        <Card value="300g" label="Carbohydrates" />
-                        <Card value="120g" label="Fat" />
+                        <Card value= {`${userStats.calorie_intake}cal`} label="Calorie Budget" />
+                        <Card value={`${userStats.protein_intake}g`}  label="Protein" />
+                        <Card value={`${userStats.carbs_intake}g`}  label="Carbohydrates" />
+                        <Card value={`${userStats.fat_intake}g`} label="Fat" />
                     </div>
                 </div>
                 <div className="Form">
-                    <StatsForm /></div>
+                    <StatsForm fetchStats={fetchUserStats} />
+                    </div>
+                <div> 
+                    <RecipeDash 
+                    userStatsCalories={userStats.calorie_intake}>
+                    </RecipeDash>
+                </div>
             </div>
         </React.Fragment>
     );
@@ -285,7 +308,7 @@ const Card = ({ value, label }) => (
     </div>
 );
 
-function StatsForm() {
+function StatsForm({fetchStats}) {
     const [show, setShow] = useState(false);
 
     const [birthDate, setBirthDate] = useState("");
@@ -301,6 +324,8 @@ function StatsForm() {
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
+        // console.log("Form Data2:", formData)
+        fetchStats();
         const formData = {
             bday: birthDate,
             height: height,
@@ -351,13 +376,12 @@ function StatsForm() {
 
                                         <RadioGroup label="Gender" options={['Male', 'Female']} value={gender}
                                             evtChanger={setGender} />
-                                        <RadioGroup label="Activity Level" options={['Sedentary', 'Lightly Active','Moderately Active', 'Very Active', 'Extra Active']} value={activityLevel}
+                                        <RadioGroup label="Activity Level" options={['Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active', 'Extra Active']} value={activityLevel}
                                             evtChanger={setActivityLevel} />
                                         <RadioGroup label="Goal" options={['Maintain Weight', 'Lose Weight', 'Gain Weight']} value={goal}
                                             evtChanger={setGoal} />
                                         <RadioGroup label="Choose your pace" options={['Slow', 'Fast']} value={pace}
                                             evtChanger={setPace} />
-                                        <button>Test</button>
                                     </form>
                                 </div>
                             </div>
@@ -377,12 +401,12 @@ function StatsForm() {
     );
 }
 
-function FormGroup({ label, inputType, placeholderMark, evtChanger}) {
+function FormGroup({ label, inputType, placeholderMark, evtChanger }) {
     return (
         <div className="form-group row">
             <label className="col-sm-3 col-form-label">{label}</label>
             <div className="col-sm-9">
-                <input type={inputType} className="form-control" placeholder={placeholderMark} onChange={(evt) => evtChanger(evt.target.value)}/>
+                <input type={inputType} className="form-control" placeholder={placeholderMark} onChange={(evt) => evtChanger(evt.target.value)} />
             </div>
         </div>
 
@@ -390,7 +414,7 @@ function FormGroup({ label, inputType, placeholderMark, evtChanger}) {
 
 }
 
-const RadioGroup = ({ label, options, evtChanger}) => (
+const RadioGroup = ({ label, options, evtChanger }) => (
     <fieldset className="form-group">
         <div className="row">
             <label className="col-form-label col-sm-3 pt-0">{label}</label>
@@ -405,3 +429,4 @@ const RadioGroup = ({ label, options, evtChanger}) => (
         </div>
     </fieldset>
 );
+

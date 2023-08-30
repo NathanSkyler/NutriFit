@@ -6,6 +6,7 @@ def calculate_age(birthdate): #incomplete
     return age
 
 def calculate_calorie_intake(user_stats): #incomplete - account of imperial and metric system
+        print(f"user stats is 4444 {user_stats.weight_goal}")
         weight_kg = user_stats.weight
         height_cm = user_stats.height 
         print(f"height is{type(height_cm)}")
@@ -67,3 +68,36 @@ def calculate_fat_intake(calorie_intake, weight_goal):
     fat_intake = fat_calories / 9  # Each gram of fat is 9 calories
 
     return fat_intake
+
+def calculate_percent_range(calories, protein, carbs, fat):
+    def calculate_ranges(value_list):
+        ranges = []
+        for value in value_list:
+            thirty_percent = 0.50 * value
+            lower = int(round(value - thirty_percent))
+            upper = int(round(value + thirty_percent))
+            ranges.append((lower, upper))
+        return ranges
+
+
+    values_breakfast = [calories*0.20, protein*0.15, carbs*0.20, fat*0.15]
+    values_lunch= [calories * 0.30, protein * 0.35, carbs*0.30, fat*0.35]
+    values_dinner= [calories * 0.30, protein * 0.30 , carbs*0.30, fat*0.35]
+    values_snack= [calories*0.20, protein*0.20, carbs*0.20, fat*0.15]
+
+    
+    ranges_breakfast = calculate_ranges(values_breakfast)
+    ranges_lunch = calculate_ranges(values_lunch)
+    ranges_dinner= calculate_ranges(values_dinner)
+    ranges_snack = calculate_ranges(values_snack)
+
+    print(values_breakfast)
+
+    result_dict = {
+        "breakfast": ranges_breakfast,
+        "lunch": ranges_lunch,
+        "dinner": ranges_dinner,
+        "snack": ranges_snack
+    }
+
+    return result_dict

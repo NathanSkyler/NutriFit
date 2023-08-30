@@ -13,18 +13,17 @@ def create_user(fname, lname, email, password):
     print(f"Added user {fname} {lname} to DB")
     return new_user
 
-def update_user_stats(stats_id, bday, height, weight, gender, activity_level, fit_goal, weight_goal):
+def update_user_stats(stats_id, bday, height, weight, gender, activity_level, weight_goal, fit_goal):
     user = db.session.query(UserStats).filter(UserStats.stats_id == stats_id).first()
     user.bday = date(*map(int, bday.split("-")))
     user.height = height
     user.weight = weight
     user.gender = gender
     user.activity_level = activity_level
-    user.fit_goal = fit_goal
     user.weight_goal = weight_goal
-
+    user.fit_goal = fit_goal
     assign_intake_values(user)
-    
+
     db.session.commit()
     print("User stats updated successfully.")
     return user
@@ -44,6 +43,7 @@ def get_user_by_id(user_id):
     return Users.query.filter(Users.user_id == user_id).first()
 
 def create_user_stats(user_id, bday, height, weight, gender, activity_level, fit_goal, weight_goal):
+
     bday_date = datetime.strptime(bday, "%Y-%m-%d").date()
     new_stats = UserStats(user_id=user_id, bday=bday_date, height=height, weight=weight, gender=gender,
                             activity_level=activity_level, fit_goal=fit_goal, weight_goal=weight_goal)
@@ -60,7 +60,6 @@ def assign_intake_values(user_stats):
     user_stats.carbs_intake = calculate_carb_intake(user_stats.calorie_intake)
     user_stats.fat_intake = calculate_fat_intake(user_stats.calorie_intake, user_stats.weight_goal)
 
-    db.session.commit()
     return user_stats
 
 
