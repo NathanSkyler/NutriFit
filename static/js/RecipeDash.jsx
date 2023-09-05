@@ -22,7 +22,7 @@ function RecipeDash({ userStatsCalories }) {
                             ...data
                         };
                     });
-                    console.log(data);
+                    // console.log(data);
                 });
         }
     }, [userStatsCalories]);
@@ -589,7 +589,29 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary, 
 
 function RecipeModal({ handleClose, show, title, image, calories, protein, carbs, fat, recipeSummary, ingredients, instructions }) {
     const handleShow = () => setShow(true);
-
+    const handleSave = (evt) => {
+        evt.preventDefault();
+        const recipeData = {
+            // recipe_id: recipe_id,
+            meal_name: title,
+            // meal_type: meal_type,
+            calories: calories,
+            protein: protein,
+            carbs: carbs,
+            fat: fat,
+            image: image
+        }
+        fetch("/save_recipe", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(recipeData)
+        })
+        .then(response => response.json())
+        .then(result => { console.log(result);
+        });
+    };
 
     function removeHtmlTagsAndSentences(inputString) {
         const stringWithoutHtml = inputString.replace(/<\/?[^>]+(>|$)/g, "");
@@ -697,7 +719,7 @@ function RecipeModal({ handleClose, show, title, image, calories, protein, carbs
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary">
+                    <Button variant="primary" onClick={handleSave}>
                         Save
                     </Button>
                 </Modal.Body>

@@ -274,19 +274,25 @@ function HomePage() {
                 </div>
                 <div className="cards">
                     <div className="row">
-                        <Card value= {`${userStats.calorie_intake}cal`} label="Calorie Budget" />
-                        <Card value={`${userStats.protein_intake}g`}  label="Protein" />
-                        <Card value={`${userStats.carbs_intake}g`}  label="Carbohydrates" />
+                        <Card value={`${userStats.calorie_intake}cal`} label="Calorie Budget" />
+                        <Card value={`${userStats.protein_intake}g`} label="Protein" />
+                        <Card value={`${userStats.carbs_intake}g`} label="Carbohydrates" />
                         <Card value={`${userStats.fat_intake}g`} label="Fat" />
                     </div>
                 </div>
                 <div className="Form">
                     <StatsForm fetchStats={fetchUserStats} />
+                </div>
+                <div className="Section1">
+                    <div className="RecipeDash">
+                        <RecipeDash
+                            userStatsCalories={userStats.calorie_intake}>
+                        </RecipeDash>
                     </div>
-                <div> 
-                    <RecipeDash 
-                    userStatsCalories={userStats.calorie_intake}>
-                    </RecipeDash>
+                    <div className="Favorites">
+                        <Favorites>
+                        </Favorites>
+                    </div>
                 </div>
             </div>
         </React.Fragment>
@@ -308,7 +314,7 @@ const Card = ({ value, label }) => (
     </div>
 );
 
-function StatsForm({fetchStats}) {
+function StatsForm({ fetchStats }) {
     const [show, setShow] = useState(false);
 
     const [birthDate, setBirthDate] = useState("");

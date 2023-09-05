@@ -70,8 +70,10 @@ def create_meal(meal_name, meal_type, calories, protein, carbs, fat, sugar, imag
     commiting(new_meal)
     return new_meal
 
-def save_meal (user_id, meal_id):
-    saved_meal = SavedMeals(user_id = user_id, meal_id = meal_id)
+def save_meal(user_id, meal_id, meal_name, meal_type, calories, protein, carbs, fat, image):
+    saved_meal = Meals(user_id = user_id, meal_id = meal_id, meal_name= meal_name,
+                            meal_type = meal_type, calories = calories, protein = protein, 
+                            carbs = carbs, fat = fat, sugar = 0, image = image)
     commiting(saved_meal)
     return saved_meal
 
@@ -88,7 +90,9 @@ def unsave_meal(meal_id, user_id):
     return saved_meal
 
 def get_saved_meals_by_user(user_id):
-    user = Users.query.get(user_id)
+    user = db.session.query(SavedMeals).filter(SavedMeals.user_id == user_id).all()
+    # user = Users.query.all(user_id)
+    # print("Test",user)
     return user.saved_meals
 
 if __name__ == '__main__':

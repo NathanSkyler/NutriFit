@@ -2,9 +2,6 @@ import requests
 import os
 from stats_calculations import calculate_percent_range
 
-
-
-
 def get_recipes_api(dict, meal_type):
 
     api_key = os.environ.get('apiKey')
@@ -35,15 +32,12 @@ def get_recipes_api(dict, meal_type):
 def format_recipe(api_response):
     formatted_recipes = []
 
-    # print(api_response)
-
     for recipe in api_response["results"]:
         title = recipe["title"]
         image_url = recipe["image"]
         nutrients = recipe["nutrition"]["nutrients"]
         nutrient_info = {}
         recipe_summary = recipe["summary"]
-        # instructions = recipe["analyzedInstructions"][0]['steps']
         ingredients = recipe["extendedIngredients"]
 
         if "analyzedInstructions" in recipe and recipe["analyzedInstructions"]:
@@ -70,3 +64,17 @@ def format_recipe(api_response):
 
     return formatted_recipes
 
+def get_recipes_by_id(id):
+
+    api_key = os.environ.get('apiKey')
+
+    url = f"https://api.spoonacular.com/recipes/{id}/information"
+
+    payload = {
+        'apiKey': api_key,
+        'includeNutrition': True
+    }
+
+    response = requests.get(url, params=payload)
+    response = response.json()
+    return response

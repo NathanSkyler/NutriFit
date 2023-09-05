@@ -1447,6 +1447,299 @@ input[type="radio"] {
 .form-check-input[disabled] ~ .form-check-label ,.form-check-input:disabled ~ .form-check-label {
 	color: #89879f;
 }
+
+/* Favorites CSS */
+body {  
+    font-family:'poppins', sans-serif;
+    font-size:0.875rem;
+    font-weight:400;
+    line-height:1.5;
+    color:#7e7e7e;
+    text-align:left;
+  }  
+* { 
+    box-sizing: border-box;
+} 
+
+* { 
+    outline: none; 
+    padding: 0;
+} 
+
+body { 
+    margin: 0; 
+    font-family: "Roboto", sans-serif; 
+    font-size: 0.875rem; 
+    font-weight: 400; 
+    line-height: 1.5; 
+    color: #7e7e7e; 
+    text-align: left; 
+    background-color: #F9F9F9;
+} 
+
+body { 
+    overflow-x: hidden; 
+    height: 100%; 
+    position: relative; 
+    max-width: 100%; 
+    font-size: 1rem;
+} 
+
+html { 
+    font-family: sans-serif; 
+    line-height: 1.15; 
+    -webkit-text-size-adjust: 100%; 
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+} 
+
+.card { 
+    margin-bottom: 1.875rem; 
+    background-color: #fff; 
+    transition: all .5s ease-in-out; 
+    position: relative; 
+    border: 0px solid transparent; 
+    border-radius: 1.25rem; 
+    box-shadow: 0px 12px 23px 0px rgba(62, 63, 122, 0.04); 
+    height: calc(100% - 30px);
+} 
+
+*,:before,:after { 
+    box-sizing: border-box;
+} 
+
+:before { 
+    margin: 0; 
+    padding: 0;
+} 
+
+:after { 
+    margin: 0; 
+    padding: 0;
+} 
+
+:selection { 
+    color: #fff; 
+    background: #EA7A9A;
+} 
+
+.card-header { 
+    padding: 0.75rem 1.25rem; 
+    margin-bottom: 0; 
+    background-color: rgba(0, 0, 0, 0.03); 
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+} 
+
+.border-0 { 
+    border: 0 !important;
+} 
+
+.d-block { 
+    display: block !important;
+} 
+
+@media (min-width: 576px){ 
+  .d-sm-flex { 
+    display: flex !important;
+  } 
+}     
+
+.pb-0 { 
+    padding-bottom: 0 !important;
+} 
+
+.card-header { 
+    border-color: #f0f1f5; 
+    position: relative; 
+    background: transparent; 
+    padding: 1.5rem 1.875rem 1.25rem; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+} 
+
+.card-header:first-child { 
+    border-radius: calc(0.75rem - 1px) calc(0.75rem - 1px) 0 0;
+} 
+
+.card-body { 
+    flex: 1 1 auto; 
+    min-height: 1px; 
+    padding: 1.25rem;
+} 
+
+.dz-scroll { 
+    position: relative;
+} 
+
+.height500 { 
+    height: 500px;
+} 
+
+.card-body { 
+    padding: 1.875rem;
+} 
+
+.card-footer { 
+    padding: 0.75rem 1.25rem; 
+    background-color: rgba(0, 0, 0, 0.03); 
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
+} 
+
+.pt-0 { 
+    padding-top: 0 !important;
+} 
+
+.card-footer { 
+    border-color: #f0f1f5; 
+    background: transparent; 
+    padding: 1.25rem 1.875rem 1.25rem;
+} 
+
+.card-footer:last-child { 
+    border-radius: 0 0 calc(0.75rem - 1px) calc(0.75rem - 1px);
+} 
+
+.border-bottom { 
+    border-bottom: 1px solid #EEEEEE !important;
+} 
+
+.d-flex { 
+    display: flex !important;
+} 
+
+.align-items-center { 
+    align-items: center !important;
+} 
+
+.mb-3 { 
+    margin-bottom: 1rem !important;
+} 
+
+.pb-3 { 
+    padding-bottom: 1rem !important;
+} 
+
+h4 { 
+    margin-top: 0; 
+    margin-bottom: 0.5rem;
+} 
+
+h4 { 
+    margin-bottom: 0.5rem; 
+    font-weight: 500; 
+    line-height: 1.2; 
+    color: #3d4465;
+} 
+
+h4 { 
+    font-size: 1.125rem;
+} 
+
+.text-black { 
+    color: #000 !important;
+} 
+
+.fs-20 { 
+    font-size: 20px !important; 
+    line-height: 1.5;
+} 
+
+p { 
+    margin-top: 0; 
+    margin-bottom: 1rem;
+} 
+
+p { 
+    line-height: 1.8;
+} 
+
+.mb-0 { 
+    margin-bottom: 0 !important;
+} 
+
+.fs-13 { 
+    font-size: 13px !important; 
+    line-height: 1.4;
+} 
+
+.trending-menus .tr-row .num  { 
+    font-size: 20px; 
+    display: block; 
+    margin-right: 20px;
+} 
+
+.pr-3 { 
+    padding-right: 1rem !important;
+} 
+
+.mr-auto { 
+    margin-right: auto !important;
+} 
+
+img { 
+    vertical-align: middle; 
+    border-style: none;
+} 
+
+.rounded { 
+    border-radius: 0.75rem !important;
+} 
+
+.rounded { 
+    border-radius: 1.25rem !important;
+} 
+
+a { 
+    color: #EA7A9A; 
+    text-decoration: none; 
+    background-color: transparent;
+} 
+
+a { 
+    color: #7e7e7e;
+} 
+
+a:hover { 
+    color: #e03868; 
+    text-decoration: underline;
+} 
+
+a:hover { 
+    text-decoration: none;
+} 
+
+.d-inline-block { 
+    display: inline-block !important;
+} 
+
+.mr-3 { 
+    margin-right: 1rem !important;
+} 
+
+.font-w600 { 
+    font-weight: 600;
+} 
+
+.fs-14 { 
+    font-size: 14px !important; 
+    line-height: 1.5;
+} 
+
+h2 { 
+    margin-top: 0; 
+    margin-bottom: 0.5rem;
+} 
+
+h2 { 
+    margin-bottom: 0.5rem; 
+    font-weight: 500; 
+    line-height: 1.2; 
+    color: #3d4465;
+} 
+
+h2 { 
+    font-size: 1.875rem;
+} 
 /* Recipe Dash Styles */
 body {
 	font-family:'poppins', sans-serif;
@@ -1491,149 +1784,6 @@ html {
 	line-height: 1.15;
 	-webkit-text-size-adjust: 100%;
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-:root {
-	--toastify-color-info: #3498db;
-	--toastify-color-success: #07bc0c;
-	--toastify-color-warning: #f1c40f;
-	--toastify-color-error: #e74c3c;
-	--toastify-icon-color-info: var(--toastify-color-info);
-	--toastify-icon-color-success: var(--toastify-color-success);
-	--toastify-icon-color-warning: var(--toastify-color-warning);
-	--toastify-icon-color-error: var(--toastify-color-error);
-	--toastify-color-progress-info: var(--toastify-color-info);
-	--toastify-color-progress-success: var(--toastify-color-success);
-	--toastify-color-progress-warning: var(--toastify-color-warning);
-	--toastify-color-progress-error: var(--toastify-color-error);
-}
-:root {
-	--ck-z-default: 1;
-	--ck-z-modal: calc(var(--ck-z-default) + 999);
-}
-:root {
-	--ck-color-base-background: rgb(255, 255, 255);
-	--ck-color-base-border: #ccced1;
-	--ck-color-base-action: #53a336;
-	--ck-color-base-text: #333;
-	--ck-color-base-error: #db3700;
-	--ck-color-focus-border-coordinates: 218,81.8%,56.9%;
-	--ck-color-focus-border: hsl(var(--ck-color-focus-border-coordinates));
-	--ck-color-focus-outer-shadow: #cae1fc;
-	--ck-color-focus-disabled-shadow: rgba(119,186,248,.3);
-	--ck-color-focus-error-shadow: rgba(255,64,31,.3);
-	--ck-color-text: var(--ck-color-base-text);
-	--ck-color-shadow-drop: rgba(0,0,0,.15);
-	--ck-color-shadow-drop-active: rgba(0,0,0,.2);
-	--ck-color-shadow-inner: rgba(0,0,0,.1);
-	--ck-color-button-default-hover-background: #f0f0f0;
-	--ck-color-button-on-color: #2977ff;
-	--ck-color-button-action-background: var(--ck-color-base-action);
-	--ck-color-button-action-text: var(--ck-color-base-background);
-	--ck-color-switch-button-on-background: var(--ck-color-button-action-background);
-	--ck-color-switch-button-inner-background: var(--ck-color-base-background);
-	--ck-color-switch-button-inner-shadow: rgba(0,0,0,.1);
-	--ck-color-dropdown-panel-background: var(--ck-color-base-background);
-	--ck-color-dropdown-panel-border: var(--ck-color-base-border);
-	--ck-color-input-background: var(--ck-color-base-background);
-	--ck-color-input-border: var(--ck-color-base-border);
-	--ck-color-input-error-border: var(--ck-color-base-error);
-	--ck-color-input-text: var(--ck-color-base-text);
-	--ck-color-input-disabled-border: var(--ck-color-base-border);
-	--ck-color-list-background: var(--ck-color-base-background);
-	--ck-color-list-button-hover-background: var(--ck-color-button-default-hover-background);
-	--ck-color-list-button-on-background: var(--ck-color-button-on-color);
-	--ck-color-list-button-on-background-focus: var(--ck-color-button-on-color);
-	--ck-color-list-button-on-text: var(--ck-color-base-background);
-	--ck-color-panel-background: var(--ck-color-base-background);
-	--ck-color-panel-border: var(--ck-color-base-border);
-	--ck-color-toolbar-background: var(--ck-color-base-background);
-	--ck-color-toolbar-border: var(--ck-color-base-border);
-	--ck-color-tooltip-background: var(--ck-color-base-text);
-	--ck-color-tooltip-text: var(--ck-color-base-background);
-	--ck-focus-outer-shadow-geometry: 0 0 0 3px;
-	--ck-focus-outer-shadow: var(--ck-focus-outer-shadow-geometry) var(--ck-color-focus-outer-shadow);
-	--ck-focus-disabled-outer-shadow: var(--ck-focus-outer-shadow-geometry) var(--ck-color-focus-disabled-shadow);
-	--ck-focus-error-outer-shadow: var(--ck-focus-outer-shadow-geometry) var(--ck-color-focus-error-shadow);
-	--ck-focus-ring: 1px solid var(--ck-color-focus-border);
-	--ck-font-size-base: 13px;
-	--ck-line-height-base: 1.84615;
-	--ck-font-size-normal: 1em;
-}
-:root {
-	--ck-border-radius: 2px;
-	--ck-inner-shadow: 2px 2px 3px var(--ck-color-shadow-inner) inset;
-	--ck-drop-shadow: 0 1px 2px 1px var(--ck-color-shadow-drop);
-	--ck-drop-shadow-active: 0 3px 6px 1px var(--ck-color-shadow-drop-active);
-	--ck-spacing-unit: 0.6em;
-	--ck-spacing-large: calc(var(--ck-spacing-unit)*1.5);
-	--ck-spacing-standard: var(--ck-spacing-unit);
-	--ck-spacing-medium: calc(var(--ck-spacing-unit)*0.8);
-	--ck-spacing-small: calc(var(--ck-spacing-unit)*0.5);
-	--ck-spacing-tiny: calc(var(--ck-spacing-unit)*0.3);
-	--ck-spacing-extra-tiny: calc(var(--ck-spacing-unit)*0.16);
-}
-:root {
-	--ck-balloon-panel-arrow-z-index: calc(var(--ck-z-default) - 3);
-}
-:root {
-	--ck-balloon-arrow-drop-shadow: 0 2px 2px var(--ck-color-shadow-drop);
-}
-:root {
-	--ck-icon-size: calc(var(--ck-line-height-base)*var(--ck-font-size-normal));
-}
-:root {
-	--ck-switch-button-toggle-width: 2.6153846154em;
-	--ck-switch-button-toggle-inner-size: calc(1.07692em + 1px);
-	--ck-switch-button-translation: calc(var(--ck-switch-button-toggle-width) - var(--ck-switch-button-toggle-inner-size) - 2px);
-	--ck-switch-button-inner-hover-shadow: 0 0 0 5px var(--ck-color-switch-button-inner-shadow);
-}
-:root {
-	--ck-dropdown-arrow-size: calc(var(--ck-icon-size)*0.5);
-}
-:root {
-	--ck-input-width: 18em;
-	--ck-input-text-width: var(--ck-input-width);
-}
-:root {
-	--ck-labeled-field-empty-unfocused-max-width: 100% - 2 * var(--ck-spacing-medium);
-	--ck-labeled-field-label-default-position-x: var(--ck-spacing-medium);
-	--ck-labeled-field-label-default-position-y: calc(var(--ck-font-size-base)*0.6);
-	--ck-color-labeled-field-label-background: var(--ck-color-base-background);
-}
-:root {
-	--ck-color-block-toolbar-button: var(--ck-color-text);
-	--ck-block-toolbar-button-size: var(--ck-font-size-normal);
-}
-:root {
-	--ck-color-widget-type-around-button-active: var(--ck-color-focus-border);
-	--ck-color-widget-type-around-button-hover: var(--ck-color-widget-hover-border);
-	--ck-color-widget-type-around-button-blurred-editable: var(--ck-color-widget-blurred-border);
-	--ck-color-widget-type-around-button-icon: var(--ck-color-base-background);
-}
-:root {
-	--ck-color-resizer: var(--ck-color-focus-border);
-	--ck-resizer-border-radius: var(--ck-border-radius);
-	--ck-resizer-tooltip-height: calc(var(--ck-spacing-small)*2 + 10px);
-}
-:root {
-	--ck-color-widget-blurred-border: #dedede;
-	--ck-color-widget-hover-border: #ffc83d;
-	--ck-color-widget-editable-focus-background: var(--ck-color-base-background);
-	--ck-color-widget-drag-handler-icon-color: var(--ck-color-base-background);
-}
-:root {
-	--ck-resizer-size: 10px;
-	--ck-resizer-offset: calc(var(--ck-resizer-size)/-2 - 2px);
-}
-:root {
-	--ck-clipboard-drop-target-color: var(--ck-color-focus-border);
-}
-:root {
-	--ck-image-style-spacing: 1.5em;
-	--ck-inline-image-style-spacing: calc(var(--ck-image-style-spacing)/2);
-}
-:root {
-	--ck-color-media-embed-placeholder-url-text-hover: var(--ck-color-base-text);
 }
 .card {
 	position: relative;
@@ -2998,5 +3148,22 @@ svg {
 .ml-2 { 
     margin-left: 0.5rem !important;
 } 
+
+.Section1 {
+    display: flex;
+    align-items: flex-start;
+}
+
+.RecipeDash {
+    max-width: 60%
+}
+
+.Favorites {
+    padding-left: 1%;
+    width: 39%;
+}
+
+
+
 
 

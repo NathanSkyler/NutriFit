@@ -2,9 +2,10 @@ from flask import Flask
 from flask import (Flask, render_template, request, flash, session, redirect, jsonify)
 from model import connect_to_db, db
 import crud
+from crud import save_meal
 from jinja2 import StrictUndefined
 from stats_calculations import calculate_percent_range
-from spoonacular import get_recipes_api, format_recipe
+from spoonacular import get_recipes_api, format_recipe, get_recipes_by_id
 
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -130,6 +131,31 @@ def get_recipes():
             return jsonify(formatted_recipes)
         else:
             pass
+
+@app.route('/get_saved_recipes')
+def get_saved_recipe():
+    user = crud.get_user_by_email(session["email"])
+    saved_recipes = crud.get_saved_meals_by_user(user.user_id)
+
+    recipes = []
+    if saved_recipes:
+        for recipe in saved_recipes:
+            recipes.append(recipe)
+        
+        return jsonify(recipes)
+    else:
+        pass
+
+@app.route('/save_recipe', methods=['POST'])
+def save_recipe():
+    user = crud.get_user_by_email(session["email"])
+    # saved_recipes = crud.get_saved_meals_by_user(user.user_id)
+    recipe_info = request.json
+
+    print(recipe_info)
+
+    # if recipe_id not in saved_recipes:
+    #     save_meal(user, recipe_id, meal_name, meal_type, calories, protein, carbs, fat, image)
 
 
 if __name__ == "__main__":
