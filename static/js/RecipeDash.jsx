@@ -22,7 +22,7 @@ function RecipeDash({ userStatsCalories }) {
                             ...data
                         };
                     });
-                    // console.log(data);
+                    console.log(data);
                 });
         }
     }, [userStatsCalories]);
@@ -78,6 +78,8 @@ function RecipeDash({ userStatsCalories }) {
                                                 recipeSummary={info.RecipeSummary}
                                                 ingredients={info.Ingredients.map((ingredient) => ingredient.original)}
                                                 instructions={info.Instructions.map((steps) => steps.step)}
+                                                recipe_id={info.RecipeID}
+                                                meal_type={foodType}
                                             />
                                         </div>
                                     );
@@ -516,7 +518,7 @@ function RecipeDash({ userStatsCalories }) {
     )
 }
 
-function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary, ingredients, instructions }) {
+function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary, ingredients, instructions, recipe_id, meal_type }) {
 
     const formattedTitle = title.replace(/\b\w+/g, function (txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -561,7 +563,6 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary, 
                                     Fat
                                 </li>
                             </ul>
-
                         </div>
                     </div>
                     <div className="d-inline-block relative donut-chart-sale">
@@ -581,20 +582,21 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary, 
                 calories={calories} protein={protein} carbs={carbs}
                 fat={fat} recipeSummary={recipeSummary}
                 ingredients={ingredients} instructions={instructions}
+                recipe_id={recipe_id} meal_type={meal_type}
 
             ></RecipeModal>}
         </div>
     )
 }
 
-function RecipeModal({ handleClose, show, title, image, calories, protein, carbs, fat, recipeSummary, ingredients, instructions }) {
+function RecipeModal({ handleClose, show, title, image, calories, protein, carbs, fat, recipeSummary, ingredients, instructions, recipe_id, meal_type }) {
     const handleShow = () => setShow(true);
     const handleSave = (evt) => {
         evt.preventDefault();
         const recipeData = {
-            // recipe_id: recipe_id,
+            recipe_id: recipe_id,
             meal_name: title,
-            // meal_type: meal_type,
+            meal_type: meal_type,
             calories: calories,
             protein: protein,
             carbs: carbs,

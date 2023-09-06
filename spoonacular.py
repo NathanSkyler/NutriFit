@@ -33,6 +33,7 @@ def format_recipe(api_response):
     formatted_recipes = []
 
     for recipe in api_response["results"]:
+        recipe_id = recipe["id"]
         title = recipe["title"]
         image_url = recipe["image"]
         nutrients = recipe["nutrition"]["nutrients"]
@@ -49,6 +50,7 @@ def format_recipe(api_response):
             nutrient_info[nutrient_name] = nutrient_amount
 
         formatted_recipe = {
+            "RecipeID": recipe_id,
             "Title": title,
             "Image": image_url,
             "Calories": nutrient_info.get("Calories", "N/A"),
@@ -78,3 +80,24 @@ def get_recipes_by_id(id):
     response = requests.get(url, params=payload)
     response = response.json()
     return response
+
+def format_saved_recipe(saved_recipes):
+    formatted_recipes = []
+
+    for recipe in saved_recipes:
+        meal_name, meal_type, calories, protein, carbs, fat, image_url, user_saved = recipe
+        
+        formatted_recipe = {
+            "Title": meal_name,
+            "MealType": meal_type,
+            "Calories": calories,
+            "Protein": protein,
+            "Carbohydrates": carbs,
+            "Fat": fat,
+            "Image": image_url,
+            "UserSaved": user_saved
+        }
+
+        formatted_recipes.append(formatted_recipe)
+
+    return formatted_recipes

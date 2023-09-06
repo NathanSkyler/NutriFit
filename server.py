@@ -2,10 +2,9 @@ from flask import Flask
 from flask import (Flask, render_template, request, flash, session, redirect, jsonify)
 from model import connect_to_db, db
 import crud
-from crud import save_meal
 from jinja2 import StrictUndefined
 from stats_calculations import calculate_percent_range
-from spoonacular import get_recipes_api, format_recipe, get_recipes_by_id
+from spoonacular import get_recipes_api, format_recipe, get_recipes_by_id, format_saved_recipe
 
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -135,27 +134,32 @@ def get_recipes():
 @app.route('/get_saved_recipes')
 def get_saved_recipe():
     user = crud.get_user_by_email(session["email"])
-    saved_recipes = crud.get_saved_meals_by_user(user.user_id)
+    saved_recipes = crud.get_meals_info(user.user_id)
 
-    recipes = []
-    if saved_recipes:
-        for recipe in saved_recipes:
-            recipes.append(recipe)
-        
-        return jsonify(recipes)
-    else:
-        pass
+    recipe_info = format_saved_recipe(saved_recipes)
+
+    return jsonify(recipe_info)
+
 
 @app.route('/save_recipe', methods=['POST'])
 def save_recipe():
     user = crud.get_user_by_email(session["email"])
-    # saved_recipes = crud.get_saved_meals_by_user(user.user_id)
+    saved_recipes = crud.get_saved_meals_by_user(user.user_id)
     recipe_info = request.json
 
-    print(recipe_info)
+    recipe_by_id = crud.get_meals_by_id(recipe_info["recipe_id"])
 
-    # if recipe_id not in saved_recipes:
-    #     save_meal(user, recipe_id, meal_name, meal_type, calories, protein, carbs, fat, image)
+    if recipe_by_id:
+        if recipe_info["recipe_id"] not in saved_recipes:
+            crud.user_saves_meal(recipe_info["recipe_id"], user.user_id)
+    else:
+        crud.save_meal(recipe_info["recipe_id"], recipe_info["meal_name"], recipe_info["meal_type"],
+        recipe_info["calories"], recipe_info["protein"], recipe_info["carbs"], recipe_info["fat"], recipe_info["image"])
+
+        crud.user_saves_meal(recipe_info["recipe_id"], user.user_id)
+
+    return "Saved User Meal"
+
 
 
 if __name__ == "__main__":

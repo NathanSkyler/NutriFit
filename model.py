@@ -50,15 +50,14 @@ class UserStats(db.Model):
 class Meals(db.Model):
     __tablename__ = "meals"
 
-    meal_id = db.Column(db.Integer, primary_key=True, autoincrement=True, unique = True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    meal_id = db.Column(db.Integer, db.ForeignKey("meals.meal_id"), primary_key=True, autoincrement=True, unique = True)
+    # user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     meal_name = db.Column(db.String, nullable=False, unique=False)
     meal_type = db.Column(db.String, nullable=False, unique=False)
     calories = db.Column(db.Integer, nullable = False, unique = False)
     protein = db.Column(db.Integer, nullable = False, unique = False)
     carbs = db.Column(db.Integer, nullable = False, unique = False)
     fat = db.Column(db.Integer, nullable = False, unique = False)
-    sugar = db.Column(db.Integer, nullable = False, unique = False)
     image = db.Column(db.String, nullable = False, unique = False)
 
     saved_meals = db.relationship("SavedMeals", back_populates="meal")

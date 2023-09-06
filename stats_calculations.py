@@ -6,10 +6,8 @@ def calculate_age(birthdate): #incomplete
     return age
 
 def calculate_calorie_intake(user_stats): #incomplete - account of imperial and metric system
-        print(f"user stats is 4444 {user_stats.weight_goal}")
         weight_kg = user_stats.weight
         height_cm = user_stats.height 
-        print(f"height is{type(height_cm)}")
         age_years = calculate_age(user_stats.bday)
 
         if user_stats.gender == "Male":
@@ -91,7 +89,6 @@ def calculate_percent_range(calories, protein, carbs, fat):
     ranges_dinner= calculate_ranges(values_dinner)
     ranges_snack = calculate_ranges(values_snack)
 
-    print(values_breakfast)
 
     result_dict = {
         "breakfast": ranges_breakfast,

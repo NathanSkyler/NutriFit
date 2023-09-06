@@ -1,4 +1,5 @@
 from model import db, Users, UserStats, Meals, SavedMeals, connect_to_db
+from sqlalchemy.orm import aliased
 from datetime import date, datetime
 from stats_calculations import calculate_calorie_intake, calculate_protein_intake, calculate_carb_intake, calculate_fat_intake
 
@@ -70,10 +71,15 @@ def create_meal(meal_name, meal_type, calories, protein, carbs, fat, sugar, imag
     commiting(new_meal)
     return new_meal
 
-def save_meal(user_id, meal_id, meal_name, meal_type, calories, protein, carbs, fat, image):
-    saved_meal = Meals(user_id = user_id, meal_id = meal_id, meal_name= meal_name,
+def save_meal(meal_id, meal_name, meal_type, calories, protein, carbs, fat, image):
+    saved_meal = Meals(meal_id = meal_id, meal_name= meal_name,
                             meal_type = meal_type, calories = calories, protein = protein, 
-                            carbs = carbs, fat = fat, sugar = 0, image = image)
+                            carbs = carbs, fat = fat, image = image)
+    commiting(saved_meal)
+    return saved_meal
+
+def user_saves_meal(meal_id, user_id):
+    saved_meal = SavedMeals(meal_id=meal_id, user_id=user_id)
     commiting(saved_meal)
     return saved_meal
 
@@ -90,10 +96,35 @@ def unsave_meal(meal_id, user_id):
     return saved_meal
 
 def get_saved_meals_by_user(user_id):
-    user = db.session.query(SavedMeals).filter(SavedMeals.user_id == user_id).all()
-    # user = Users.query.all(user_id)
-    # print("Test",user)
-    return user.saved_meals
+    saved_meals = db.session.query(SavedMeals).filter(SavedMeals.user_id == user_id).all()
+    user_saved_meals = [meal for meal in saved_meals]
+
+    return user_saved_meals
+
+def get_meals_info(user_id):
+    meal_info = (
+        db.session.query(
+            Meals.meal_name,
+            Meals.meal_type,
+            Meals.calories,
+            Meals.protein,
+            Meals.carbs,
+            Meals.fat,
+            Meals.image,
+            SavedMeals.user_saved
+        )
+        .join(SavedMeals, Meals.meal_id == SavedMeals.meal_id)
+        .filter(SavedMeals.user_id == user_id)
+        .all()
+    )
+    print("this is meals_is", meal_info)
+
+
+    return meal_info
+
+def get_meals_by_id(meal_id):
+    saved_meals = db.session.query(Meals).filter(Meals.meal_id == meal_id).first()
+    return saved_meals
 
 if __name__ == '__main__':
     from server import app
