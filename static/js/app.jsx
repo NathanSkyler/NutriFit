@@ -1,10 +1,3 @@
-// import React from 'react';
-// import StatsForm from './StatsForm';
-// import LoginPage from './LoginPage';
-// import HomePage from './HomePage';
-
-
-
 function App() {
 
         return (

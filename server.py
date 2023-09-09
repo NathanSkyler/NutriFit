@@ -5,6 +5,7 @@ import crud
 from jinja2 import StrictUndefined
 from stats_calculations import calculate_percent_range
 from spoonacular import get_recipes_api, format_recipe, get_recipes_by_id, format_saved_recipe
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -104,6 +105,27 @@ def get_stats():
         response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
         return response
 
+from datetime import datetime
+from flask import jsonify
+
+@app.route('/get_form_stats')
+def get_form_stats():
+    user = crud.get_user_by_email(session["email"])
+    user_stats = crud.get_user_stats_by_user_id(user.user_id)
+
+    if user_stats:
+        user_stats_dict = {
+            "bday": user_stats.bday.strftime("%Y-%m-%d"),
+            "height": user_stats.height,
+            "weight": user_stats.weight,
+            "gender": user_stats.gender,
+            "activityLevel": user_stats.activity_level,
+            "fitGoal": user_stats.fit_goal,
+            "weightGoal": user_stats.weight_goal
+        }
+        return jsonify(user_stats_dict)
+
+
 @app.route('/get_recipes')
 def get_recipes():
         user = crud.get_user_by_email(session["email"])
@@ -121,20 +143,22 @@ def get_recipes():
             snack_recipes = get_recipes_api(percent_range['snack'], 'snack')
 
             formatted_recipes = {
-                'breakfast': format_recipe(breakfast_recipes),
-                'lunch': format_recipe(lunch_recipes),
-                'dinner': format_recipe(dinner_recipes),
-                'snack': format_recipe(snack_recipes)
+                'breakfast': format_recipe(breakfast_recipes, user.user_id),
+                'lunch': format_recipe(lunch_recipes, user.user_id),
+                'dinner': format_recipe(dinner_recipes, user.user_id),
+                'snack': format_recipe(snack_recipes, user.user_id)
                 }
 
             return jsonify(formatted_recipes)
         else:
             pass
 
-@app.route('/get_saved_recipes')
+@app.route('/get_saved_recipes', methods=['GET','POST'])
 def get_saved_recipe():
     user = crud.get_user_by_email(session["email"])
     saved_recipes = crud.get_meals_info(user.user_id)
+    
+    saved_recipes = [recipe for recipe in saved_recipes if recipe[-1]]
 
     recipe_info = format_saved_recipe(saved_recipes)
 
@@ -142,24 +166,25 @@ def get_saved_recipe():
 
 
 @app.route('/save_recipe', methods=['POST'])
-def save_recipe():
+def save_or_resave_recipe():
     user = crud.get_user_by_email(session["email"])
-    saved_recipes = crud.get_saved_meals_by_user(user.user_id)
     recipe_info = request.json
+    user_saved_recipe = crud.get_saved_meal_info(user.user_id, recipe_info["recipe_id"])
 
-    recipe_by_id = crud.get_meals_by_id(recipe_info["recipe_id"])
-
-    if recipe_by_id:
-        if recipe_info["recipe_id"] not in saved_recipes:
-            crud.user_saves_meal(recipe_info["recipe_id"], user.user_id)
+    if user_saved_recipe == False:
+        crud.resave_meal(user.user_id, recipe_info["recipe_id"])
+        return "Resaved User Meal"
+    elif user_saved_recipe == True:
+        crud.unsave_meal(user.user_id, recipe_info["recipe_id"])
+        return "Unsaved User Meal"
     else:
         crud.save_meal(recipe_info["recipe_id"], recipe_info["meal_name"], recipe_info["meal_type"],
-        recipe_info["calories"], recipe_info["protein"], recipe_info["carbs"], recipe_info["fat"], recipe_info["image"])
+        recipe_info["calories"], recipe_info["protein"], recipe_info["carbs"], recipe_info["fat"],
+        recipe_info["image"], recipe_info["recipe_summary"], recipe_info["ingredients"], recipe_info["instructions"])
 
         crud.user_saves_meal(recipe_info["recipe_id"], user.user_id)
 
     return "Saved User Meal"
-
 
 
 if __name__ == "__main__":

@@ -71,10 +71,11 @@ def create_meal(meal_name, meal_type, calories, protein, carbs, fat, sugar, imag
     commiting(new_meal)
     return new_meal
 
-def save_meal(meal_id, meal_name, meal_type, calories, protein, carbs, fat, image):
+def save_meal(meal_id, meal_name, meal_type, calories, protein, carbs, fat, image, recipe_summary, ingredients, instructions):
     saved_meal = Meals(meal_id = meal_id, meal_name= meal_name,
                             meal_type = meal_type, calories = calories, protein = protein, 
-                            carbs = carbs, fat = fat, image = image)
+                            carbs = carbs, fat = fat, image = image,
+                            recipe_summary = recipe_summary, ingredients = ingredients, instructions = instructions)
     commiting(saved_meal)
     return saved_meal
 
@@ -89,8 +90,10 @@ def resave_meal (user_id, meal_id):
     db.session.commit()
     return saved_meal
 
-def unsave_meal(meal_id, user_id):
+def unsave_meal(user_id, meal_id):
     saved_meal = db.session.query(SavedMeals).filter(SavedMeals.user_id == user_id, SavedMeals.meal_id == meal_id).first()
+    print(meal_id)
+    print(saved_meal)
     saved_meal.user_saved = False
     db.session.commit()
     return saved_meal
@@ -105,26 +108,44 @@ def get_meals_info(user_id):
     meal_info = (
         db.session.query(
             Meals.meal_name,
+            Meals.meal_id,
             Meals.meal_type,
             Meals.calories,
             Meals.protein,
             Meals.carbs,
             Meals.fat,
             Meals.image,
+            Meals.recipe_summary,
+            Meals.ingredients,
+            Meals.instructions,
             SavedMeals.user_saved
         )
         .join(SavedMeals, Meals.meal_id == SavedMeals.meal_id)
         .filter(SavedMeals.user_id == user_id)
         .all()
     )
-    print("this is meals_is", meal_info)
-
-
     return meal_info
+
+def check_if_meal_saved(user_id, recipe_id):
+    meal_info = (
+        db.session.query(SavedMeals.user_saved)
+        .filter(SavedMeals.user_id == user_id, SavedMeals.meal_id == recipe_id)
+        .first()
+    )
+    return meal_info[0] if meal_info else None
 
 def get_meals_by_id(meal_id):
     saved_meals = db.session.query(Meals).filter(Meals.meal_id == meal_id).first()
     return saved_meals
+
+def get_saved_meal_info(user_id, meal_id):
+    saved_meal = db.session.query(SavedMeals.user_saved).filter_by(user_id=user_id, meal_id=meal_id).first()
+
+    if saved_meal:
+        return saved_meal[0]
+    else:
+        return None
+
 
 if __name__ == '__main__':
     from server import app

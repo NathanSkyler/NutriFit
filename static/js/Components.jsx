@@ -317,18 +317,35 @@ const Card = ({ value, label }) => (
 function StatsForm({ fetchStats }) {
     const [show, setShow] = useState(false);
 
-    const [birthDate, setBirthDate] = useState("");
-    const [height, setHeight] = useState("");
-    const [weight, setWeight] = useState("");
+    const [birthDate, setBirthDate] = useState("MM/DD/YYYY");
+    const [height, setHeight] = useState("Height in cm");
+    const [weight, setWeight] = useState("Weight in kg");
     const [gender, setGender] = useState("");
     const [activityLevel, setActivityLevel] = useState("");
     const [goal, setGoal] = useState("");
     const [pace, setPace] = useState("");
-    const [bdayholder, setBdayHolder] = useState("MM/DD/YYYY");
+
+    const fetchFormStats = () => {
+        fetch("/get_form_stats")
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                setBirthDate(data["bday"])
+                setHeight(data["height"]);
+                setWeight(data["weight"])
+                setGender(data["gender"])
+                setActivityLevel(data["activityLevel"])
+                setGoal(data["fitGoal"])
+                // setPace(data["weightGoal"])
+            })
+    };
+
+    useEffect(() => {
+        fetchFormStats();
+    }, []);
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        // console.log("Form Data2:", formData)
         fetchStats();
         const formData = {
             bday: birthDate,
@@ -355,6 +372,7 @@ function StatsForm({ fetchStats }) {
     const handleShow = () => setShow(true);
 
 
+
     return (
         <>
             <Button variant="primary" onClick={handleShow}>
@@ -371,21 +389,21 @@ function StatsForm({ fetchStats }) {
                             <div className="card-body">
                                 <div className="basic-form">
                                     <form onSubmit={handleSubmit}>
-                                        <FormGroup label="Birthdate" inputType="date" placeholderMark={bdayholder} value={birthDate}
-                                            evtChanger={setBirthDate} />
-                                        <FormGroup label="Height" inputType="number" placeholderMark="Height in cm" value={height}
+                                        <FormGroup label="Birthdate" inputType="date" placeholderMark={birthDate} value={birthDate}
+                                            evtChanger={setBirthDate} defaultValue={birthDate} />
+                                        <FormGroup label="Height" inputType="number" placeholderMark={height} value={height}
                                             evtChanger={setHeight} />
-                                        <FormGroup label="Weight" inputType="number" placeholderMark="Weight in kg" value={weight}
+                                        <FormGroup label="Weight" inputType="number" placeholderMark={weight} value={weight}
                                             evtChanger={setWeight} />
 
-                                        <RadioGroup label="Gender" options={['Male', 'Female']} value={gender}
+                                        <RadioGroup label="Gender" options={['Male', 'Female']} value={gender} defaultValue={gender}
                                             evtChanger={setGender} />
                                         <RadioGroup label="Activity Level" options={['Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active', 'Extra Active']} value={activityLevel}
-                                            evtChanger={setActivityLevel} />
+                                            defaultValue={activityLevel} evtChanger={setActivityLevel} />
                                         <RadioGroup label="Goal" options={['Maintain Weight', 'Lose Weight', 'Gain Weight']} value={goal}
-                                            evtChanger={setGoal} />
+                                            defaultValue={goal} evtChanger={setGoal} />
                                         <RadioGroup label="Choose your pace" options={['Slow', 'Fast']} value={pace}
-                                            evtChanger={setPace} />
+                                            defaultValue={pace} evtChanger={setPace} />
                                     </form>
                                 </div>
                             </div>
@@ -405,12 +423,14 @@ function StatsForm({ fetchStats }) {
     );
 }
 
-function FormGroup({ label, inputType, placeholderMark, evtChanger }) {
+function FormGroup({ label, inputType, placeholderMark, evtChanger, defaultValue }) {
     return (
         <div className="form-group row">
             <label className="col-sm-3 col-form-label">{label}</label>
             <div className="col-sm-9">
-                <input type={inputType} className="form-control" placeholder={placeholderMark} onChange={(evt) => evtChanger(evt.target.value)} />
+                <input type={inputType} className="form-control" placeholder={placeholderMark}
+                    onChange={(evt) => evtChanger(evt.target.value)}
+                    defaultValue={defaultValue} />
             </div>
         </div>
 
@@ -418,19 +438,29 @@ function FormGroup({ label, inputType, placeholderMark, evtChanger }) {
 
 }
 
-const RadioGroup = ({ label, options, evtChanger }) => (
-    <fieldset className="form-group">
-        <div className="row">
-            <label className="col-form-label col-sm-3 pt-0">{label}</label>
-            <div className="col-sm-9">
-                {options.map((option, index) => (
-                    <div className="form-check" key={index}>
-                        <input className="form-check-input" type="radio" name={label} value={option} onChange={(evt) => evtChanger(evt.target.value)} />
-                        <label className="form-check-label">{option}</label>
-                    </div>
-                ))}
+const RadioGroup = ({ label, options, defaultValue, evtChanger }) => {
+    return (
+        <fieldset className="form-group">
+            <div className="row">
+                <label className="col-form-label col-sm-3 pt-0">{label}</label>
+                <div className="col-sm-9">
+                    {options.map((option, index) => (
+                        <div className="form-check" key={index}>
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                name={label}
+                                value={option}
+                                checked={option === defaultValue}
+                                onChange={(evt) => evtChanger(evt.target.value)}
+                            />
+                            <label className="form-check-label">{option}</label>
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
-    </fieldset>
-);
+        </fieldset>
+    );
+};
+
 

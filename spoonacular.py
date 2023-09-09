@@ -1,6 +1,7 @@
 import requests
 import os
 from stats_calculations import calculate_percent_range
+from crud import check_if_meal_saved
 
 def get_recipes_api(dict, meal_type):
 
@@ -29,7 +30,7 @@ def get_recipes_api(dict, meal_type):
     response = response.json()
     return response
 
-def format_recipe(api_response):
+def format_recipe(api_response, user_id):
     formatted_recipes = []
 
     for recipe in api_response["results"]:
@@ -49,6 +50,8 @@ def format_recipe(api_response):
             nutrient_amount = nutrient["amount"]
             nutrient_info[nutrient_name] = nutrient_amount
 
+        is_meal_saved = check_if_meal_saved(user_id, recipe_id)
+
         formatted_recipe = {
             "RecipeID": recipe_id,
             "Title": title,
@@ -59,7 +62,8 @@ def format_recipe(api_response):
             "Fat": nutrient_info.get("Fat", "N/A"),
             "RecipeSummary": recipe_summary,
             "Instructions": instructions,
-            "Ingredients": ingredients
+            "Ingredients": ingredients,
+            "UserSaved": is_meal_saved
         }
 
         formatted_recipes.append(formatted_recipe)
@@ -85,16 +89,20 @@ def format_saved_recipe(saved_recipes):
     formatted_recipes = []
 
     for recipe in saved_recipes:
-        meal_name, meal_type, calories, protein, carbs, fat, image_url, user_saved = recipe
+        meal_name, meal_id, meal_type, calories, protein, carbs, fat, image_url, recipe_summary, ingredients, instructions, user_saved = recipe
         
         formatted_recipe = {
             "Title": meal_name,
+            "RecipeID": meal_id,
             "MealType": meal_type,
             "Calories": calories,
             "Protein": protein,
             "Carbohydrates": carbs,
             "Fat": fat,
             "Image": image_url,
+            "RecipeSummary": recipe_summary,
+            "Ingredients": ingredients,
+            "Instructions": instructions,
             "UserSaved": user_saved
         }
 

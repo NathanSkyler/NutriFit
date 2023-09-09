@@ -59,6 +59,9 @@ class Meals(db.Model):
     carbs = db.Column(db.Integer, nullable = False, unique = False)
     fat = db.Column(db.Integer, nullable = False, unique = False)
     image = db.Column(db.String, nullable = False, unique = False)
+    recipe_summary = db.Column(db.String, nullable = False, unique = False)
+    ingredients = db.Column(db.String, nullable = False, unique = False)
+    instructions = db.Column(db.String, nullable = False, unique = False)
 
     saved_meals = db.relationship("SavedMeals", back_populates="meal")
 

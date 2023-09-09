@@ -80,6 +80,7 @@ function RecipeDash({ userStatsCalories }) {
                                                 instructions={info.Instructions.map((steps) => steps.step)}
                                                 recipe_id={info.RecipeID}
                                                 meal_type={foodType}
+                                                user_saved={info.UserSaved}
                                             />
                                         </div>
                                     );
@@ -518,7 +519,7 @@ function RecipeDash({ userStatsCalories }) {
     )
 }
 
-function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary, ingredients, instructions, recipe_id, meal_type }) {
+function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary, ingredients, instructions, recipe_id, meal_type, user_saved }) {
 
     const formattedTitle = title.replace(/\b\w+/g, function (txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -582,14 +583,14 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary, 
                 calories={calories} protein={protein} carbs={carbs}
                 fat={fat} recipeSummary={recipeSummary}
                 ingredients={ingredients} instructions={instructions}
-                recipe_id={recipe_id} meal_type={meal_type}
+                recipe_id={recipe_id} meal_type={meal_type} user_saved={user_saved}
 
             ></RecipeModal>}
         </div>
     )
 }
 
-function RecipeModal({ handleClose, show, title, image, calories, protein, carbs, fat, recipeSummary, ingredients, instructions, recipe_id, meal_type }) {
+function RecipeModal({ handleClose, show, title, image, calories, protein, carbs, fat, recipeSummary, ingredients, instructions, recipe_id, meal_type, user_saved, fetchSavedRecipes }) {
     const handleShow = () => setShow(true);
     const handleSave = (evt) => {
         evt.preventDefault();
@@ -601,7 +602,10 @@ function RecipeModal({ handleClose, show, title, image, calories, protein, carbs
             protein: protein,
             carbs: carbs,
             fat: fat,
-            image: image
+            image: image,
+            recipe_summary: recipeSummary,
+            ingredients: ingredients,
+            instructions: instructions,
         }
         fetch("/save_recipe", {
             method: "POST",
@@ -633,7 +637,18 @@ function RecipeModal({ handleClose, show, title, image, calories, protein, carbs
         return inputString;
     }
     const recipeSummary_fromatted = removeHtmlTagsAndSentences(recipeSummary)
+    const [saveButton, setSaveButton] = useState(user_saved ? "Unsave" : "Save");
 
+    const handleButtonSave = () => {
+        setSaveButton((prevSaveButton) => {
+            return prevSaveButton === "Save" ? "Unsave" : "Save";
+        });
+    };
+
+    const handleButtonClick = async (evt) => {
+        handleSave(evt);
+        handleButtonSave(evt);
+    };
     return (
         <>
 
@@ -721,9 +736,10 @@ function RecipeModal({ handleClose, show, title, image, calories, protein, carbs
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={handleSave}>
-                        Save
-                    </Button>
+                    <Button variant="primary" onClick={handleButtonClick}>
+    {saveButton}
+</Button>
+
                 </Modal.Body>
             </Modal>
         </>
