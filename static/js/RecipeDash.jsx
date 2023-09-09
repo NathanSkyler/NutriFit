@@ -1,7 +1,7 @@
 const Tab = ReactBootstrap.Tab
 const Tabs = ReactBootstrap.Tabs
 
-function RecipeDash({ userStatsCalories }) {
+function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
     const [recipeInfo, setRecipeInfo] = useState({
         'breakfast': {},
         'lunch': {},
@@ -22,7 +22,6 @@ function RecipeDash({ userStatsCalories }) {
                             ...data
                         };
                     });
-                    console.log(data);
                 });
         }
     }, [userStatsCalories]);
@@ -81,6 +80,7 @@ function RecipeDash({ userStatsCalories }) {
                                                 recipe_id={info.RecipeID}
                                                 meal_type={foodType}
                                                 user_saved={info.UserSaved}
+                                                fetchSavedRecipes={fetchSavedRecipes}
                                             />
                                         </div>
                                     );
@@ -519,7 +519,8 @@ function RecipeDash({ userStatsCalories }) {
     )
 }
 
-function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary, ingredients, instructions, recipe_id, meal_type, user_saved }) {
+function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary,
+    ingredients, instructions, recipe_id, meal_type, user_saved, fetchSavedRecipes }) {
 
     const formattedTitle = title.replace(/\b\w+/g, function (txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -583,15 +584,17 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary, 
                 calories={calories} protein={protein} carbs={carbs}
                 fat={fat} recipeSummary={recipeSummary}
                 ingredients={ingredients} instructions={instructions}
-                recipe_id={recipe_id} meal_type={meal_type} user_saved={user_saved}
+        recipe_id={recipe_id} meal_type={meal_type} user_saved={user_saved} fetchSavedRecipes={fetchSavedRecipes}
 
             ></RecipeModal>}
         </div>
     )
 }
 
-function RecipeModal({ handleClose, show, title, image, calories, protein, carbs, fat, recipeSummary, ingredients, instructions, recipe_id, meal_type, user_saved, fetchSavedRecipes }) {
-    const handleShow = () => setShow(true);
+function RecipeModal({ handleClose, show, title, image, calories, protein, carbs, fat,
+    recipeSummary, ingredients, instructions, recipe_id, meal_type,
+    user_saved, fetchSavedRecipes }) {
+const handleShow = () => setShow(true);
     const handleSave = (evt) => {
         evt.preventDefault();
         const recipeData = {
@@ -615,8 +618,6 @@ function RecipeModal({ handleClose, show, title, image, calories, protein, carbs
             body: JSON.stringify(recipeData)
         })
         .then(response => response.json())
-        .then(result => { console.log(result);
-        });
     };
 
     function removeHtmlTagsAndSentences(inputString) {
@@ -646,8 +647,10 @@ function RecipeModal({ handleClose, show, title, image, calories, protein, carbs
     };
 
     const handleButtonClick = async (evt) => {
-        handleSave(evt);
-        handleButtonSave(evt);
+        await handleSave(evt);
+        await handleButtonSave(evt);
+        await fetchSavedRecipes();
+        await fetchSavedRecipes();
     };
     return (
         <>

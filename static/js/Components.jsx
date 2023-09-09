@@ -33,7 +33,6 @@ function LoginPage(props) {
             email: email,
             password: password
         }
-        console.log(formData)
         fetch("/register", {
             method: "POST",
             headers: {
@@ -115,6 +114,22 @@ function LoginPage(props) {
 }
 
 function HomePage() {
+
+    const [savedRecipes, setSavedRecipes] = useState([])
+
+    const fetchSavedRecipes = () => {
+        fetch("/get_saved_recipes")
+            .then((response) => response.json())
+            .then((data) => {
+                setSavedRecipes(data);
+                console.log(data)
+            })
+    };
+
+    useEffect(() => {
+        fetchSavedRecipes();
+    }, []);
+
 
 
     const [userStats, setUserStats] = useState({});
@@ -286,11 +301,13 @@ function HomePage() {
                 <div className="Section1">
                     <div className="RecipeDash">
                         <RecipeDash
-                            userStatsCalories={userStats.calorie_intake}>
+                            userStatsCalories={userStats.calorie_intake}
+                            fetchSavedRecipes={fetchSavedRecipes}>
                         </RecipeDash>
                     </div>
                     <div className="Favorites">
-                        <Favorites>
+                        <Favorites fetchSavedRecipes={fetchSavedRecipes}
+                        savedRecipes={savedRecipes}>
                         </Favorites>
                     </div>
                 </div>
@@ -329,14 +346,12 @@ function StatsForm({ fetchStats }) {
         fetch("/get_form_stats")
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)
                 setBirthDate(data["bday"])
                 setHeight(data["height"]);
                 setWeight(data["weight"])
                 setGender(data["gender"])
                 setActivityLevel(data["activityLevel"])
                 setGoal(data["fitGoal"])
-                // setPace(data["weightGoal"])
             })
     };
 
@@ -365,7 +380,6 @@ function StatsForm({ fetchStats }) {
         })
             .then(response => response.json())
             .then(result => { alert(result.status); });
-        console.log("Form Data:", formData);
     };
 
     const handleClose = () => setShow(false);

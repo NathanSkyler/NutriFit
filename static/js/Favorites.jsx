@@ -1,19 +1,4 @@
-function Favorites() {
-    const [savedRecipes, setSavedRecipes] = useState([])
-
-    const fetchSavedRecipes = () => {
-        fetch("/get_saved_recipes")
-            .then((response) => response.json())
-            .then((data) => {
-                setSavedRecipes(data);
-            })
-    };
-
-    useEffect(() => {
-        fetchSavedRecipes();
-    }, [savedRecipes]);
-    
-
+function Favorites({savedRecipes, fetchSavedRecipes}) {
     return (
         <div>
             <div className="card trending-menus snipcss-NvKfM">
@@ -39,6 +24,7 @@ function Favorites() {
                                     instructions={info.Instructions}
                                     recipe_id={info.RecipeID}
                                     user_saved={info.UserSaved}
+                                    fetchSavedRecipes={fetchSavedRecipes}
                                 />
                             </div>
                         );
@@ -61,7 +47,6 @@ function FavoriteRecipeCard({ title, img, calories, protein, carbs, fat, recipeS
     const ingredientList = formattedIngredients.split(',');
     const formattedInstructions = instructions.replace(/[{"}]/g, '');
     const instructionList = formattedInstructions.split(',');
-    console.log(user_saved)
 
     return (
         <div>
