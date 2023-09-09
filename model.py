@@ -37,8 +37,8 @@ class UserStats(db.Model):
     weight = db.Column(db.Float, nullable = False, unique = False)
     gender = db.Column(db.String, nullable = False, unique = False)
     activity_level = db.Column(db.String, nullable = False, unique = False)
-    fit_goal = db.Column(db.String, nullable = True, unique = False) #pace of weight change
-    weight_goal = db.Column(db.String, nullable = False, unique = False) #maitain weight / gain weight / loose weight
+    fit_goal = db.Column(db.String, nullable = False, unique = False) #maitain weight / gain weight / loose weight
+    weight_goal = db.Column(db.String, nullable = True, unique = False) #pace of weight change
 
     calorie_intake = db.Column(db.Integer, nullable=False, unique=False)
     protein_intake = db.Column(db.Integer, nullable = False, unique = False)

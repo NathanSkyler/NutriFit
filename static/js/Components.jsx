@@ -307,7 +307,7 @@ function HomePage() {
                     </div>
                     <div className="Favorites">
                         <Favorites fetchSavedRecipes={fetchSavedRecipes}
-                        savedRecipes={savedRecipes}>
+                            savedRecipes={savedRecipes}>
                         </Favorites>
                     </div>
                 </div>
@@ -352,6 +352,8 @@ function StatsForm({ fetchStats }) {
                 setGender(data["gender"])
                 setActivityLevel(data["activityLevel"])
                 setGoal(data["fitGoal"])
+                setPace(data["weightGoal"])
+                console.log(result)
             })
     };
 
@@ -361,15 +363,14 @@ function StatsForm({ fetchStats }) {
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        fetchStats();
         const formData = {
             bday: birthDate,
             height: height,
             weight: weight,
             gender: gender,
             activity_level: activityLevel,
-            fit_goal: goal,
-            weight_goal: pace
+            fit_goal: pace,
+            weight_goal: goal
         };
         fetch("/update_stats", {
             method: "POST",
@@ -379,7 +380,8 @@ function StatsForm({ fetchStats }) {
             body: JSON.stringify(formData)
         })
             .then(response => response.json())
-            .then(result => { alert(result.status); });
+        fetchStats();
+        setShow(false)
     };
 
     const handleClose = () => setShow(false);
@@ -414,10 +416,12 @@ function StatsForm({ fetchStats }) {
                                             evtChanger={setGender} />
                                         <RadioGroup label="Activity Level" options={['Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active', 'Extra Active']} value={activityLevel}
                                             defaultValue={activityLevel} evtChanger={setActivityLevel} />
-                                        <RadioGroup label="Goal" options={['Maintain Weight', 'Lose Weight', 'Gain Weight']} value={goal}
-                                            defaultValue={goal} evtChanger={setGoal} />
-                                        <RadioGroup label="Choose your pace" options={['Slow', 'Fast']} value={pace}
+                                        <RadioGroup label="Goal" options={['Maintain Weight', 'Lose Weight', 'Gain Weight']} value={pace}
                                             defaultValue={pace} evtChanger={setPace} />
+                                        {(pace === "Lose Weight" || pace === "Gain Weight") &&
+                                            <RadioGroup label="Choose your pace" options={['Slow', 'Fast']} value={goal}
+                                                defaultValue={goal} evtChanger={setGoal} />
+                                        }
                                     </form>
                                 </div>
                             </div>

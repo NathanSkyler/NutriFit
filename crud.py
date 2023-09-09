@@ -14,7 +14,7 @@ def create_user(fname, lname, email, password):
     print(f"Added user {fname} {lname} to DB")
     return new_user
 
-def update_user_stats(stats_id, bday, height, weight, gender, activity_level, weight_goal, fit_goal):
+def update_user_stats(stats_id, bday, height, weight, gender, activity_level, fit_goal, weight_goal):
     user = db.session.query(UserStats).filter(UserStats.stats_id == stats_id).first()
     user.bday = date(*map(int, bday.split("-")))
     user.height = height
