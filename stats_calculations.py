@@ -5,22 +5,24 @@ def calculate_age(birthdate): #incomplete
     age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
     return age
 
-def calculate_calorie_intake(user_stats): #incomplete - account of imperial and metric system
+def calculate_calorie_intake(user_stats):
+        """Incomplete - account of imperial and metric system"""
         weight_kg = user_stats.weight
         height_cm = user_stats.height 
         age_years = calculate_age(user_stats.bday)
 
         if user_stats.gender == "Male":
-            base_calories = 10 * weight_kg + 6.25 * height_cm - 5 * age_years + 5
+            base_calories = (10 * weight_kg) + (6.25 * height_cm) - (5 * age_years) + 5
         else:
             base_calories = 10 * weight_kg + 6.25 * height_cm - 5 * age_years - 161
 
         activity_level_multiplier = {
-        "sedentary": 1.2,
-        "lightly active": 1.375,
-        "moderately active": 1.55,
-        "very active": 1.725,
-        "extra active": 1.9 }
+            "sedentary": 1.2,
+            "lightly active": 1.375,
+            "moderately active": 1.55,
+            "very active": 1.725,
+            "extra active": 1.9,
+        }
         
         activity_level = user_stats.activity_level.lower()
         calorie_intake = base_calories * activity_level_multiplier[activity_level]

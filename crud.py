@@ -92,8 +92,6 @@ def resave_meal (user_id, meal_id):
 
 def unsave_meal(user_id, meal_id):
     saved_meal = db.session.query(SavedMeals).filter(SavedMeals.user_id == user_id, SavedMeals.meal_id == meal_id).first()
-    print(meal_id)
-    print(saved_meal)
     saved_meal.user_saved = False
     db.session.commit()
     return saved_meal

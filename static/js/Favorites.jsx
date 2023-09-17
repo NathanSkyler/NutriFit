@@ -1,4 +1,4 @@
-function Favorites({savedRecipes, fetchSavedRecipes}) {
+function Favorites({ savedRecipes, fetchSavedRecipes }) {
     return (
         <div>
             <div className="card trending-menus snipcss-NvKfM">
@@ -8,7 +8,7 @@ function Favorites({savedRecipes, fetchSavedRecipes}) {
                         <p className="fs-13 mb-0 text-black">Click on them to get more info!</p>
                     </div>
                 </div>
-                <div className="card-body dz-scroll height500" id="dailyMenus">
+                <div className="card-body dz-scroll" id="dailyMenus">
                     {savedRecipes && savedRecipes.map((info) => {
                         return (
                             <div className="col-lg-6">

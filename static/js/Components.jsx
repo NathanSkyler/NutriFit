@@ -3,6 +3,8 @@ const ReactDOM = window.ReactDOM;
 const Button = ReactBootstrap.Button;
 const Modal = ReactBootstrap.Modal;
 const useEffect = React.useEffect
+const Tab = ReactBootstrap.Tab
+const Tabs = ReactBootstrap.Tabs
 
 const style = {
     position: 'absolute',
@@ -122,7 +124,6 @@ function HomePage() {
             .then((response) => response.json())
             .then((data) => {
                 setSavedRecipes(data);
-                console.log(data)
             })
     };
 
@@ -133,6 +134,7 @@ function HomePage() {
 
 
     const [userStats, setUserStats] = useState({});
+    const [tabValue, setTabValue] = useState("recipes")
 
     useEffect(() => {
         fetch("/get_stats")
@@ -149,6 +151,8 @@ function HomePage() {
                 setUserStats(data);
             });
     };
+
+
 
     return (
         <React.Fragment>
@@ -298,24 +302,56 @@ function HomePage() {
                 <div className="Form">
                     <StatsForm fetchStats={fetchUserStats} />
                 </div>
-                <div className="Section1">
-                    <div className="RecipeDash">
-                        <RecipeDash
-                            userStatsCalories={userStats.calorie_intake}
-                            fetchSavedRecipes={fetchSavedRecipes}>
-                        </RecipeDash>
-                    </div>
-                    <div className="Favorites">
-                        <Favorites fetchSavedRecipes={fetchSavedRecipes}
-                            savedRecipes={savedRecipes}>
-                        </Favorites>
-                    </div>
+
+                <div className="card-action card-tabs mt-3 mt-3 mt-lg-0">
+                    <Tabs
+                        defaultActiveKey="profile"
+                        id="uncontrolled-tab-example"
+                        className="mb-3"
+                        activeKey={tabValue}
+                        onSelect={(key) => setTabValue(key)}
+                    >
+                        <Tab eventKey="recipes" title="Recipes For You">
+                        </Tab>
+                        <Tab eventKey="restaurants" title="Healthy Restaurants Map">
+                        </Tab>
+                    </Tabs>
                 </div>
+                {tabValue === "recipes" && (
+                    <div className="Section1">
+                        <div className="RecipeDash">
+                            <RecipeDash
+                                userStatsCalories={userStats.calorie_intake}
+                                fetchSavedRecipes={fetchSavedRecipes}>
+                            </RecipeDash>
+                        </div>
+                        <div className="Favorites">
+                            <Favorites fetchSavedRecipes={fetchSavedRecipes}
+                                savedRecipes={savedRecipes}>
+                            </Favorites>
+                        </div>
+                    </div>
+                )}
+
+                {tabValue === "restaurants" && (
+                    <div className="Restaurants">
+                        <div className="GoogleMaps">
+                            <RestaurantView>
+                            </RestaurantView>
+                        </div>
+                    </div>
+                )}
+
+
+
+
+
             </div>
         </React.Fragment>
     );
 
 }
+
 const Card = ({ value, label }) => (
     <div className="col-xl-3 col-xxl-6 col-sm-6 snipcss-klI8l">
         <div className="card grd-card">

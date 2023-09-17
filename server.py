@@ -6,6 +6,8 @@ from jinja2 import StrictUndefined
 from stats_calculations import calculate_percent_range
 from spoonacular import get_recipes_api, format_recipe, get_recipes_by_id, format_saved_recipe
 from datetime import datetime
+import yelp
+from geopy.geocoders import Nominatim
 
 app = Flask(__name__)
 app.secret_key = "dev"
@@ -185,6 +187,34 @@ def save_or_resave_recipe():
         crud.user_saves_meal(recipe_info["recipe_id"], user.user_id)
 
     return "Saved User Meal"
+
+@app.route('/get_yelp_results', methods=["GET", "POST"])
+def get_yelp_results():
+    user_latitude = request.json.get("latitude")
+    user_longitude = request.json.get("longitude")
+    zipcode = request.json.get('zipCode')
+    print("hello",zipcode)
+
+    if user_latitude == None:
+        geolocator = Nominatim(user_agent="zipcode_to_coords")
+        location = geolocator.geocode(f"{zipcode}, USA")
+        latitude = location.latitude
+        longitude = location.longitude
+        yelp_results = yelp.get_restaurants_api(latitude, longitude)
+        yelp_results_formatted = yelp.format_yelp_results(yelp_results)
+
+        response_data = {
+            "latitude": latitude,
+            "longitude": longitude,
+            "yelpResults": yelp_results_formatted
+        }
+
+        return jsonify(response_data)
+    
+    yelp_results = yelp.get_restaurants_api(user_latitude, user_longitude)
+    yelp_results_formatted = yelp.format_yelp_results(yelp_results)
+
+    return jsonify(yelp_results_formatted)
 
 
 if __name__ == "__main__":
