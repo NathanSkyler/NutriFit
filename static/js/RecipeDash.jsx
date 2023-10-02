@@ -16,6 +16,7 @@ function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
             fetch('/get_recipes')
                 .then((response) => response.json())
                 .then((data) => {
+                    console.log(data)
                     setRecipeInfo((prevRecipeInfo) => {
                         return {
                             ...prevRecipeInfo,
@@ -76,6 +77,7 @@ function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
                                                 fat={info.Fat}
                                                 recipeSummary={info.RecipeSummary}
                                                 ingredients={info.Ingredients.map((ingredient) => ingredient.original)}
+                                                increase_amount={info.IncreaseIngredientsAmount}
                                                 instructions={info.Instructions.map((steps) => steps.step)}
                                                 recipe_id={info.RecipeID}
                                                 meal_type={foodType}
@@ -520,7 +522,7 @@ function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
 }
 
 function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary,
-    ingredients, instructions, recipe_id, meal_type, user_saved, fetchSavedRecipes }) {
+    ingredients, increase_amount, instructions, recipe_id, meal_type, user_saved, fetchSavedRecipes }) {
 
     const formattedTitle = title.replace(/\b\w+/g, function (txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -529,6 +531,16 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary,
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [increased, setIncreased] = useState(" ")
+
+    useEffect(() => {
+        if (increase_amount > 0) {
+            setIncreased(<div className="icon-container">
+                <i className="fa-solid fa-clipboard-list fa-bounce fa-lg" style={{ color: '#ed4666' }}></i>
+                <div className="icon-window">Modified to meet your dietary requirements!</div>
+            </div>)
+        }
+    }, [increase_amount])
 
     return (
 
@@ -545,6 +557,7 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary,
                             <a className="text-black">
                                 {formattedTitle}
                             </a>
+                            <span> {increased}</span>
                         </h5>
                         <div className="d-flex mb-2">
                             <ul>
@@ -583,8 +596,8 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary,
             {show && <RecipeModal handleClose={handleClose} title={title} image={img} show={show}
                 calories={calories} protein={protein} carbs={carbs}
                 fat={fat} recipeSummary={recipeSummary}
-                ingredients={ingredients} instructions={instructions}
-        recipe_id={recipe_id} meal_type={meal_type} user_saved={user_saved} fetchSavedRecipes={fetchSavedRecipes}
+                ingredients={ingredients} increase_amount={increase_amount} instructions={instructions}
+                recipe_id={recipe_id} meal_type={meal_type} user_saved={user_saved} fetchSavedRecipes={fetchSavedRecipes}
 
             ></RecipeModal>}
         </div>
@@ -592,33 +605,21 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary,
 }
 
 function RecipeModal({ handleClose, show, title, image, calories, protein, carbs, fat,
-    recipeSummary, ingredients, instructions, recipe_id, meal_type,
+    recipeSummary, ingredients, increase_amount, instructions, recipe_id, meal_type,
     user_saved, fetchSavedRecipes }) {
-const handleShow = () => setShow(true);
-    const handleSave = (evt) => {
-        evt.preventDefault();
-        const recipeData = {
-            recipe_id: recipe_id,
-            meal_name: title,
-            meal_type: meal_type,
-            calories: calories,
-            protein: protein,
-            carbs: carbs,
-            fat: fat,
-            image: image,
-            recipe_summary: recipeSummary,
-            ingredients: ingredients,
-            instructions: instructions,
+
+    const handleShow = () => setShow(true);
+    const [increaseAlert, setIncreaseAlert] = useState(" ")
+
+    useEffect(() => {
+        if (increase_amount > 0) {
+            setIncreaseAlert(<span>*Increase Ingredient amount by {increase_amount}%</span>)
         }
-        fetch("/save_recipe", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(recipeData)
-        })
-        .then(response => response.json())
-    };
+    }, [increase_amount])
+
+    if (instructions[0] === undefined) {
+        instructions = ["Not Available"]
+    }
 
     function removeHtmlTagsAndSentences(inputString) {
         const stringWithoutHtml = inputString.replace(/<\/?[^>]+(>|$)/g, "");
@@ -639,7 +640,31 @@ const handleShow = () => setShow(true);
     }
     const recipeSummary_fromatted = removeHtmlTagsAndSentences(recipeSummary)
     const [saveButton, setSaveButton] = useState(user_saved ? "Unsave" : "Save");
-
+    const handleSave = (evt) => {
+        evt.preventDefault();
+        const recipeData = {
+            recipe_id: recipe_id,
+            meal_name: title,
+            meal_type: meal_type,
+            calories: calories,
+            protein: protein,
+            carbs: carbs,
+            fat: fat,
+            image: image,
+            recipe_summary: recipeSummary_fromatted,
+            ingredients: ingredients,
+            instructions: instructions,
+            increase_amount: increase_amount,
+        }
+        fetch("/save_recipe", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(recipeData)
+        })
+            .then(response => response.json())
+    };
     const handleButtonSave = () => {
         setSaveButton((prevSaveButton) => {
             return prevSaveButton === "Save" ? "Unsave" : "Save";
@@ -715,7 +740,7 @@ const handleShow = () => setShow(true);
                                 <li class="list-group-item">
                                     <span class="mb-0 title">
                                         <ul>
-                                            <b>Ingredients</b>
+                                            <b>Ingredients</b> {increaseAlert}
                                             {ingredients.map((ingredient, index) => (
                                                 <li key={index}>{ingredient}</li>
                                             ))}
@@ -740,8 +765,8 @@ const handleShow = () => setShow(true);
                         Close
                     </Button>
                     <Button variant="primary" onClick={handleButtonClick}>
-    {saveButton}
-</Button>
+                        {saveButton}
+                    </Button>
 
                 </Modal.Body>
             </Modal>

@@ -73,7 +73,7 @@ def calculate_percent_range(calories, protein, carbs, fat):
     def calculate_ranges(value_list):
         ranges = []
         for value in value_list:
-            thirty_percent = 0.50 * value
+            thirty_percent = 0.10 * value
             lower = int(round(value - thirty_percent))
             upper = int(round(value + thirty_percent))
             ranges.append((lower, upper))
@@ -98,5 +98,7 @@ def calculate_percent_range(calories, protein, carbs, fat):
         "dinner": ranges_dinner,
         "snack": ranges_snack
     }
+
+    print(result_dict)
 
     return result_dict

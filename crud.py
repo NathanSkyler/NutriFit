@@ -71,11 +71,12 @@ def create_meal(meal_name, meal_type, calories, protein, carbs, fat, sugar, imag
     commiting(new_meal)
     return new_meal
 
-def save_meal(meal_id, meal_name, meal_type, calories, protein, carbs, fat, image, recipe_summary, ingredients, instructions):
+def save_meal(meal_id, meal_name, meal_type, calories, protein, carbs, fat, image, recipe_summary, ingredients, instructions, increase_amount):
     saved_meal = Meals(meal_id = meal_id, meal_name= meal_name,
                             meal_type = meal_type, calories = calories, protein = protein, 
                             carbs = carbs, fat = fat, image = image,
-                            recipe_summary = recipe_summary, ingredients = ingredients, instructions = instructions)
+                            recipe_summary = recipe_summary, ingredients = ingredients, instructions = instructions,
+                            increase_amount = increase_amount)
     commiting(saved_meal)
     return saved_meal
 
@@ -116,6 +117,7 @@ def get_meals_info(user_id):
             Meals.recipe_summary,
             Meals.ingredients,
             Meals.instructions,
+            Meals.increase_amount,
             SavedMeals.user_saved
         )
         .join(SavedMeals, Meals.meal_id == SavedMeals.meal_id)

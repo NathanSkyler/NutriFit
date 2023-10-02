@@ -62,6 +62,7 @@ class Meals(db.Model):
     recipe_summary = db.Column(db.String, nullable = False, unique = False)
     ingredients = db.Column(db.String, nullable = False, unique = False)
     instructions = db.Column(db.String, nullable = False, unique = False)
+    increase_amount= db.Column(db.String, nullable = True, unique = False)
 
     saved_meals = db.relationship("SavedMeals", back_populates="meal")
 

@@ -389,7 +389,6 @@ function StatsForm({ fetchStats }) {
                 setActivityLevel(data["activityLevel"])
                 setGoal(data["fitGoal"])
                 setPace(data["weightGoal"])
-                console.log(result)
             })
     };
 

@@ -24,6 +24,7 @@ function Favorites({ savedRecipes, fetchSavedRecipes }) {
                                     instructions={info.Instructions}
                                     recipe_id={info.RecipeID}
                                     user_saved={info.UserSaved}
+                                    increaseAmount = {info.IncreaseAmount}
                                     fetchSavedRecipes={fetchSavedRecipes}
                                 />
                             </div>
@@ -38,9 +39,10 @@ function Favorites({ savedRecipes, fetchSavedRecipes }) {
 }
 
 function FavoriteRecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary,
-    ingredients, instructions, recipe_id, meal_type, user_saved, fetchSavedRecipes }) {
+    ingredients, instructions, recipe_id, meal_type, user_saved, increaseAmount, fetchSavedRecipes }) {
 
     const [show, setShow] = useState(false);
+    const [increased, setIncreased] = useState(" ")
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const formattedIngredients = ingredients.replace(/[{"}]/g, '');
@@ -48,12 +50,23 @@ function FavoriteRecipeCard({ title, img, calories, protein, carbs, fat, recipeS
     const formattedInstructions = instructions.replace(/[{"}]/g, '');
     const instructionList = formattedInstructions.split(',');
 
+    useEffect(() => {
+        if (increaseAmount > 0) {
+            setIncreased(<div className="icon-container">
+                <i className="fa-solid fa-clipboard-list fa-bounce fa-lg" style={{ color: '#ed4666' }}></i>
+                <div className="icon-window">Modified to meet your dietary requirements!</div>
+            </div>)
+        }
+    }, [increaseAmount])
+
     return (
         <div>
             <button className="RecipeButton" onClick={handleShow}>
                 <div className="d-flex pb-3 mb-3 border-bottom tr-row align-items-center">
                     <div className="mr-auto pr-3">
-                        <h2 className="text-black fs-14">{title}</h2>
+                        <h2 className="text-black fs-14">{title}
+                        <span> {increased}</span>
+                        </h2>
                         <ul>
                             <li className="fs-14 text-black">
                                 <strong className="mr-1">{`${Math.round(calories)}cal`}</strong>
@@ -84,7 +97,7 @@ function FavoriteRecipeCard({ title, img, calories, protein, carbs, fat, recipeS
             {show && <RecipeModal handleClose={handleClose} title={title} image={img} show={show}
                 calories={calories} protein={protein} carbs={carbs}
                 fat={fat} recipeSummary={recipeSummary}
-                ingredients={ingredientList} instructions={instructionList}
+                ingredients={ingredientList} increase_amount={increaseAmount} instructions={instructionList}
                 recipe_id={recipe_id} meal_type={meal_type} user_saved={user_saved}
                 fetchSavedRecipes={fetchSavedRecipes}
 

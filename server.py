@@ -139,16 +139,16 @@ def get_recipes():
                                     user_stats.carbs_intake, 
                                     user_stats.fat_intake)
 
-            breakfast_recipes = get_recipes_api(percent_range['breakfast'], 'breakfast')
-            lunch_recipes = get_recipes_api(percent_range['lunch'], 'main course')
-            dinner_recipes = get_recipes_api(percent_range['dinner'], 'main course')
-            snack_recipes = get_recipes_api(percent_range['snack'], 'snack')
+            breakfast_recipes = get_recipes_api('breakfast', percent_range['breakfast'])
+            # lunch_recipes = get_recipes_api('main course', percent_range['lunch'])
+            # dinner_recipes = get_recipes_api('main course', percent_range['dinner'])
+            # snack_recipes = get_recipes_api('snack', percent_range['snack'])
 
             formatted_recipes = {
-                'breakfast': format_recipe(breakfast_recipes, user.user_id),
-                'lunch': format_recipe(lunch_recipes, user.user_id),
-                'dinner': format_recipe(dinner_recipes, user.user_id),
-                'snack': format_recipe(snack_recipes, user.user_id)
+                'breakfast': format_recipe(breakfast_recipes, user.user_id, percent_range['breakfast'] ),
+                # 'lunch': format_recipe(lunch_recipes, user.user_id, percent_range['lunch']),
+                # 'dinner': format_recipe(dinner_recipes, user.user_id, percent_range['dinner']),
+                # 'snack': format_recipe(snack_recipes, user.user_id, percent_range['snack'])
                 }
 
             return jsonify(formatted_recipes)
@@ -182,7 +182,8 @@ def save_or_resave_recipe():
     else:
         crud.save_meal(recipe_info["recipe_id"], recipe_info["meal_name"], recipe_info["meal_type"],
         recipe_info["calories"], recipe_info["protein"], recipe_info["carbs"], recipe_info["fat"],
-        recipe_info["image"], recipe_info["recipe_summary"], recipe_info["ingredients"], recipe_info["instructions"])
+        recipe_info["image"], recipe_info["recipe_summary"], recipe_info["ingredients"], recipe_info["instructions"],
+        recipe_info["increase_amount"])
 
         crud.user_saves_meal(recipe_info["recipe_id"], user.user_id)
 

@@ -3650,6 +3650,7 @@ svg {
 	width: 50%
 }
 
+/* Restuarants View CSS */
 .selected {
 	background-color: #f0f0f0;
 }
@@ -3695,4 +3696,61 @@ iframe {
 
 .card-body.restaurants {
 	padding: 0.75rem;
+}
+
+/* restaurant marker style */
+
+.info-window {
+	width: 200px;
+	text-align: center;
+}
+
+.info-window-title {
+	font-size: 18px;
+	margin-bottom: 5px;
+}
+
+.info-window-address {
+	font-size: 14px;
+	color: #888;
+	margin-bottom: 10px;
+}
+
+.info-window-image {
+	display: flex;
+	justify-content: center;
+}
+
+.info-window-image img {
+	width: 100%;
+	max-height: 100%;
+}
+
+/* Modified Recipe Icon Style */
+.icon-container {
+	position: relative;
+	display: inline-block;
+}
+
+.icon-window {
+	position: absolute;
+	top: -70px;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: #ecc5b6;
+	color: #d2576b;
+	padding: 10px;
+	border: 1px solid #ecc5b6;
+	border-radius: 5px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	display: none;
+	z-index: 1;
+	transition: opacity 0.3s ease-in-out;
+	width: 200px;
+	text-align: center;
+}
+
+.icon-container:hover .icon-window {
+	display: block;
+	opacity: 1;
 }

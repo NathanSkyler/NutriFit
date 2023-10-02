@@ -95,7 +95,13 @@ function RestaurantView() {
             });
 
             const markerInfoWindow = new google.maps.InfoWindow({
-                content: `<h4>${restaurant.Name}</h4>`,
+                content: `        <div class="info-window">
+                <h4 class="info-window-title">${restaurant.Name}</h4>
+                <p class="info-window-address">${restaurant.Address}</p>
+                <div class="info-window-image">
+                    <img src="${restaurant.ImageUrl}" alt="${restaurant.Name}" />
+                </div>
+            </div>`,
             });
 
             const buttons = document.querySelectorAll(`.restaurants[data-restaurant-id="${restaurant.Id}"]`);
@@ -143,9 +149,9 @@ function RestaurantView() {
                         <p className="fs-13 mb-0 text-black">Healthy Restaurants Near You!</p>
                         <div id="map" style={{ height: '700px', width: '100%' }}></div>
                         <SearchBar
-                        sumbitLocation = {sumbitLocation}
-                        setZipCode={setZipCode}
-                        zipCode={zipCode}>
+                            sumbitLocation={sumbitLocation}
+                            setZipCode={setZipCode}
+                            zipCode={zipCode}>
                         </SearchBar>
                     </div>
                     <div className="card-footer border-0 pt-0"></div>
@@ -251,7 +257,7 @@ function RestaurantModal({ handleClose, show, url }) {
     );
 }
 
-function SearchBar({sumbitLocation, setZipCode, zipCode}) {
+function SearchBar({ sumbitLocation, setZipCode }) {
 
     const handleZipCodeChange = (evt) => {
         setZipCode(evt.target.value);
