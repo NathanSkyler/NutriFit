@@ -1,11 +1,8 @@
-const { useEffect } = require("react");
-
 function RestaurantView() {
     const [yelpData, setYelpData] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
     const [zipCode, setZipCode] = useState(null);
-    
 
 
     useEffect(() => {
@@ -150,7 +147,7 @@ function RestaurantView() {
                     <div className="card-body restaurants dz-scroll" id="dailyMenus">
                         <h4 className="text-black fs-20">Local Map</h4>
                         <p className="fs-13 mb-0 text-black">Healthy Restaurants Near You!</p>
-                        <div id="map" style={{ height: '700px', width: '100%' }}></div>
+                        <div id="map" style={{ height: '700px', width: '100%', marginTop:"23px" }}></div>
                         <SearchBar
                             sumbitLocation={sumbitLocation}
                             setZipCode={setZipCode}
@@ -166,7 +163,6 @@ function RestaurantView() {
 
 
 function Restaurants({ yelpData, selectedRestaurant, setSelectedRestaurant }) {
-
     function handleRestaurantCardClick(restaurant) {
         setSelectedRestaurant(restaurant);
     }
@@ -179,18 +175,21 @@ function Restaurants({ yelpData, selectedRestaurant, setSelectedRestaurant }) {
                         <p className="fs-13 mb-0 text-black">Scroll to see more!</p>
                     </div>
                 </div>
-                <div className="card-body dz-scroll" style={{marginTop: '12%', minWidth: "552px", minHeight:"715px"}} id="dailyMenus">
+                <div className="card-body dz-scroll" style={{ marginTop: '12%', minWidth: "552px", minHeight: "715px" }} id="dailyMenus">
                     {Array.isArray(yelpData) && yelpData.map((restaurant) => (
                         <div className={`restaurants ${selectedRestaurant &&
                             selectedRestaurant.Id === restaurant.Id ? 'selected' : ''}`} key={restaurant.Id} data-restaurant-id={restaurant.Id} onClick={() => handleRestaurantCardClick(restaurant)}>
-                            <RestaurantCard
-                                name={restaurant.Name}
-                                address={restaurant.Address}
-                                categories={restaurant.Categories.join(', ')}
-                                imageUrl={restaurant.ImageUrl}
-                                rating={restaurant.Rating}
-                                url={restaurant.url}
-                            />
+                            <FadeInDiv>
+                                <RestaurantCard
+                                    name={restaurant.Name}
+                                    address={restaurant.Address}
+                                    categories={restaurant.Categories.join(', ')}
+                                    imageUrl={restaurant.ImageUrl}
+                                    rating={restaurant.Rating}
+                                    url
+                                    ={restaurant.url}
+                                />
+                            </FadeInDiv>
                         </div>
                     ))}
                 </div>
@@ -201,6 +200,7 @@ function Restaurants({ yelpData, selectedRestaurant, setSelectedRestaurant }) {
     )
 }
 
+
 function RestaurantCard({ key, name, address, categories, imageUrl, rating, url }) {
 
     const [show, setShow] = useState(false);
@@ -210,30 +210,30 @@ function RestaurantCard({ key, name, address, categories, imageUrl, rating, url 
     return (
         <div>
             <button className="RestaurantButton" onClick={handleShow}>
-                <div className="RestaurantInfo d-flex pb-3 mb-3 border-bottom tr-row align-items-center" style={{width:"100%"}}>
+                <div className="RestaurantInfo d-flex pb-3 mb-3 border-bottom tr-row align-items-center" style={{ width: "100%" }}>
                     <div className="restaurant" >
                         <div>
-                        <b className="text-black" style={{fontSize:"20px"}}>{name}</b>
-                        <ul>
-                            <li className="fs-14 text-black">
-                                <strong className="mr-1">{address}</strong>
+                            <b className="text-black" style={{ fontSize: "20px" }}>{name}</b>
+                            <ul>
+                                <li className="fs-14 text-black">
+                                    <strong className="mr-1">{address}</strong>
 
-                            </li>
-                            <li className="fs-14 text-black">
-                                <strong className="mr-1">{categories}</strong>
-                            </li>
-                            <li className="fs-14 text-black">
-                                <strong className="mr-1">{rating}</strong>
-                                Star Rating
-                            </li>
-                        </ul>
+                                </li>
+                                <li className="fs-14 text-black">
+                                    <strong className="mr-1">{categories}</strong>
+                                </li>
+                                <li className="fs-14 text-black">
+                                    <strong className="mr-1">{rating}</strong>
+                                    Star Rating
+                                </li>
+                            </ul>
                         </div>
-                    <img
-                        src={`${imageUrl}`}
-                        alt="menu9"
-                        width={60}
-                        className="restaurant img"
-                    />
+                        <img
+                            src={`${imageUrl}`}
+                            alt="menu9"
+                            width={60}
+                            className="restaurant img"
+                        />
                     </div>
                 </div>
             </button>

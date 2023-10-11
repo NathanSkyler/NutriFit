@@ -1,12 +1,11 @@
 from datetime import date
 
-def calculate_age(birthdate): #incomplete
+def calculate_age(birthdate):
     today = date.today()
     age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
     return age
 
 def calculate_calorie_intake(user_stats):
-        """Incomplete - account of imperial and metric system"""
         weight_kg = user_stats.weight
         height_cm = user_stats.height 
         age_years = calculate_age(user_stats.bday)
@@ -80,10 +79,10 @@ def calculate_percent_range(calories, protein, carbs, fat):
         return ranges
 
 
-    values_breakfast = [calories*0.20, protein*0.15, carbs*0.20, fat*0.15]
+    values_breakfast = [calories*0.25, protein*0.20, carbs*0.25, fat*0.20]
     values_lunch= [calories * 0.30, protein * 0.35, carbs*0.30, fat*0.35]
     values_dinner= [calories * 0.30, protein * 0.30 , carbs*0.30, fat*0.35]
-    values_snack= [calories*0.20, protein*0.20, carbs*0.20, fat*0.15]
+    values_snack= [calories*0.20, protein*0.15, carbs*0.15, fat*0.10]
 
     
     ranges_breakfast = calculate_ranges(values_breakfast)

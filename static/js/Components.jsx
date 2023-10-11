@@ -7,6 +7,8 @@ const Tab = ReactBootstrap.Tab
 const Tabs = ReactBootstrap.Tabs
 const Spinner = ReactBootstrap.Spinner
 const Alert = ReactBootstrap.Alert
+const Dropdown = ReactBootstrap.Dropdown
+const DropdownButton = ReactBootstrap.DropdownButton
 
 const style = {
     position: 'absolute',
@@ -185,6 +187,11 @@ function HomePage() {
             });
     };
 
+    const handleLogout = async () => {
+        await fetch('/logout', { method: 'GET', credentials: 'include' });
+        window.location.href = '/';
+    }
+
     return (
         <React.Fragment>
             <div>
@@ -192,7 +199,7 @@ function HomePage() {
                     <nav className="navbar navbar-expand">
                         <div className="collapse navbar-collapse justify-content-between">
                             <div className="header-left">
-                                <div className="dashboard_bar style-RA64s" id="style-RA64s">
+                                <div className="dashboard_bar style-RA64s" id="style-RA64s" style={{ fontSize: "41px", marginLeft: "-38px" }}>
                                     NutriFit
                                 </div>
                             </div>
@@ -211,10 +218,10 @@ function HomePage() {
                                             alt="profile"
                                         />
                                         <div className="header-info">
-                                            <span className="text-black">
-                                                <strong>{name}</strong>
-                                            </span>
-                                            <p className="fs-12 mb-0">Test User</p>
+                                            <DropdownButton title={<strong style={{marginLeft:"-25px"}}>{name}</strong>} id="dropdown-menu-align-right">
+                                                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                                            </DropdownButton>
+                                            <p className="fs-12 mb-0">Demo User</p>
                                         </div>
                                     </a>
                                 </li>
@@ -230,7 +237,7 @@ function HomePage() {
                         <Card value={`${userStats.fat_intake}g`} label="Fat" loading={loading} />
                     </div>
                 </div>
-                <div className="Form">
+                <div className="Form" style={{ marginTop: "-35px" }}>
                     <StatsForm fetchStats={fetchUserStats} userStats={userStats} />
                 </div>
 
@@ -283,6 +290,7 @@ function HomePage() {
 
 }
 
+
 const Card = ({ value, label, loading }) => (
     <div className="col-xl-3 col-xxl-6 col-sm-6 snipcss-klI8l">
         <div className="card grd-card">
@@ -332,13 +340,7 @@ function StatsForm({ fetchStats, userStats }) {
 
 
     useEffect(() => {
-        fetchFormStats(); 
-        // if (Object.keys(userStats).length === 0 ) {
-        //     console.log("hello")
-        //     setAlert(
-        //         <div className="flash-alert"><Alert style={{ borderColor: 'pink', backgroundColor: 'pink' }} variant='warning'>{<i className="fa-solid fa-arrow-left fa-xl" style={{ color: 'black' }} />}  <b style={{ color: 'black' }}>Please enter your fitness goals!</b></Alert></div>);
-
-        // }
+        fetchFormStats();
     }, [])
 
     const handleSubmit = (evt) => {
@@ -361,6 +363,7 @@ function StatsForm({ fetchStats, userStats }) {
         })
             .then(response => response.json())
         fetchStats();
+        fetchStats();
         setShow(false)
     };
 
@@ -377,9 +380,9 @@ function StatsForm({ fetchStats, userStats }) {
                     </Button>
                 </div>
                 <div className="col-lg-6" style={{ right: '42%', maxWidth: '15%' }}>
-                    {birthDate === "MM/DD/YYYY" && 
-                    (<div className="flash-alert"><Alert style={{ borderColor: 'pink', backgroundColor: 'pink' }} variant='warning'>{<i className="fa-solid fa-arrow-left fa-xl" style={{ color: 'black' }} />}  <b style={{ color: 'black' }}>Please enter your fitness goals!</b></Alert>
-                    </div>)}
+                    {birthDate === "MM/DD/YYYY" &&
+                        (<div className="flash-alert"><Alert style={{ borderColor: 'pink', backgroundColor: 'pink' }} variant='warning'>{<i className="fa-solid fa-arrow-left fa-xl" style={{ color: 'black' }} />}  <b style={{ color: 'black' }}>Please enter your fitness goals!</b></Alert>
+                        </div>)}
                 </div>
             </div>
 
@@ -466,6 +469,19 @@ const RadioGroup = ({ label, options, defaultValue, evtChanger }) => {
                 </div>
             </div>
         </fieldset>
+    );
+};
+
+const FadeInDiv = ({ children }) => {
+    const [showDiv, setShowDiv] = useState(false);
+    React.useEffect(() => {
+        setShowDiv(true);
+    }, []);
+
+    return (
+        <div className={showDiv ? 'fadeIn' : 'fadeOut'}>
+            {children}
+        </div>
     );
 };
 

@@ -3103,9 +3103,26 @@ strong {
 }
 
 button.RecipeButton {
-	background-color: white;
-	border: white;
-	padding: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	justify-content: center;
+	text-align: center;
+	padding: 10px 20px;
+	border-image-slice: 1;
+	border-radius: 10px;
+	margin-bottom: 2%;
+	background: linear-gradient(to right, #edc6b700, #d15469cc);
+	border-color: grey;
+	box-shadow: 2px 2px 5px grey;
+	font-family: Arial, sans-serif;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+	width: 104%;
+
+	&:hover {
+		transform: scale(1.05);
+	}
 }
 
 
@@ -3808,11 +3825,11 @@ iframe {
 }
 
 .card.trending-menus {
-	height: 795px;
+	height: 815px;
 }
 
 .card.snipcss-jULXg {
-	height: 795px
+	height: 815px
 }
 
 #map {
@@ -3865,3 +3882,78 @@ iframe {
 	width: 110px;
 	max-height: 93px;
 }
+
+.fadeIn {
+	opacity: 1;
+	transition: opacity 1s ease-in-out;
+}
+
+.fadeOut {
+	opacity: 0;
+	transition: opacity 1s ease-in-out;
+}
+
+img.rounded.image {
+	width: 30%;
+}
+
+.RecipeSuggestionButton {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	justify-content: center;
+	text-align: center;
+	padding: 0px 20px;
+	box-shadow: 7px 4px 16px rgb(212 128 154);
+	border-image-slice: 1;
+	border-color: transparent;
+	border-radius: 10px;
+	margin-bottom: 2%;
+	background: linear-gradient(to right, transparent, transparent);
+	font-family: Arial, sans-serif;
+	transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+	width: 85%;
+	height: 185px;
+
+	&:hover {
+		transform: scale(1.05);
+	}
+}
+
+[aria-label="diets"] {
+	margin-top: 18px;
+}
+
+.selected-button,
+.selected-button:hover {
+	background-color: pink;
+	border-radius: 32px;
+}
+
+
+.dietbutton:hover {
+	background-color: #ffc0cb82;
+	border-radius: 32px;
+}
+
+.dietgroup {
+	border-bottom: 2px solid black;
+	border-top: 2px solid black;
+	border-radius: 30px;
+	box-shadow: 0px 3px 2px grey;
+}
+
+.icon-content:hover {
+	transform: scale(1.1);
+}
+
+.card-action .nav-tabs .nav-item .nav-link {
+	font-size: 18px !important;
+}
+
+.dropdown-toggle.btn.btn-primary {
+	font-size: 16px; 
+	background-color: transparent !important;
+	border-color: tra;
+	color:#000
+  }

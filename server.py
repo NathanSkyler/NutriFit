@@ -147,15 +147,15 @@ def get_recipes():
                                     user_stats.fat_intake)
 
             breakfast_recipes = get_recipes_api('breakfast', percent_range['breakfast'], dietType, 0)
-            # lunch_recipes = get_recipes_api('main course', percent_range['lunch'], dietType, 0)
-            # dinner_recipes = get_recipes_api('main course', percent_range['dinner'],dietType, 6)
-            # snack_recipes = get_recipes_api('snack', percent_range['snack'], dietType, 0)
+            lunch_recipes = get_recipes_api('main course', percent_range['lunch'], dietType, 0)
+            dinner_recipes = get_recipes_api('main course', percent_range['dinner'],dietType, 6)
+            snack_recipes = get_recipes_api('snack', percent_range['snack'], dietType, 0)
 
             formatted_recipes = {
                 'breakfast': format_recipe(breakfast_recipes, user.user_id, percent_range['breakfast'] ),
-                # 'lunch': format_recipe(lunch_recipes, user.user_id, percent_range['lunch']),
-                # 'dinner': format_recipe(dinner_recipes, user.user_id, percent_range['dinner']),
-                # 'snack': format_recipe(snack_recipes, user.user_id, percent_range['snack'])
+                'lunch': format_recipe(lunch_recipes, user.user_id, percent_range['lunch']),
+                'dinner': format_recipe(dinner_recipes, user.user_id, percent_range['dinner']),
+                'snack': format_recipe(snack_recipes, user.user_id, percent_range['snack'])
                 }
 
             return jsonify(formatted_recipes)

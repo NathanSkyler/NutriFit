@@ -1,7 +1,7 @@
 function Favorites({ savedRecipes, fetchSavedRecipes }) {
     return (
         <div>
-            <div className="card trending-menus snipcss-NvKfM">
+            <div className="card trending-menus snipcss-NvKfM" style={{ overflow: 'auto' }}>
                 <div className="card-header d-sm-flex d-block pb-0 border-0">
                     <div>
                         <h4 className="text-black fs-20">Saved Recipes</h4>
@@ -9,27 +9,32 @@ function Favorites({ savedRecipes, fetchSavedRecipes }) {
                     </div>
                 </div>
                 <div className="card-body dz-scroll" id="dailyMenus">
-                    {savedRecipes && savedRecipes.map((info) => {
-                        return (
-                            <div className="col-lg-6">
-                                <FavoriteRecipeCard
-                                    title={info.Title}
-                                    img={info.Image}
-                                    calories={info.Calories}
-                                    protein={info.Protein}
-                                    carbs={info.Carbohydrates}
-                                    fat={info.Fat}
-                                    recipeSummary={info.RecipeSummary}
-                                    ingredients={info.Ingredients}
-                                    instructions={info.Instructions}
-                                    recipe_id={info.RecipeID}
-                                    user_saved={info.UserSaved}
-                                    increaseAmount = {info.IncreaseAmount}
-                                    fetchSavedRecipes={fetchSavedRecipes}
-                                />
-                            </div>
-                        );
-                    })}
+                    <div className="row" style={{marginTop: "-47px"}}>
+                        {savedRecipes &&
+                            savedRecipes.map((info) => (
+                                <div className="col-lg-6" key={info.RecipeID}>
+                                    <FadeInDiv>
+                                        <FavoriteRecipeCard
+                                            title={info.Title}
+                                            img={info.Image}
+                                            calories={info.Calories}
+                                            protein={info.Protein}
+                                            carbs={info.Carbohydrates}
+                                            fat={info.Fat}
+                                            recipeSummary={info.RecipeSummary}
+                                            ingredients={info.Ingredients}
+                                            instructions={info.Instructions}
+                                            recipe_id={info.RecipeID}
+                                            user_saved={info.UserSaved}
+                                            increaseAmount={info.IncreaseAmount}
+                                            fetchSavedRecipes={fetchSavedRecipes}
+                                        />
+                                    </FadeInDiv>
+                                </div>
+                            ))}
+                        <div className="col-lg-6">
+                        </div>
+                    </div>
                 </div>
                 <div className="card-footer border-0 pt-0"></div>
             </div>
@@ -64,9 +69,9 @@ function FavoriteRecipeCard({ title, img, calories, protein, carbs, fat, recipeS
             <button className="RecipeButton" onClick={handleShow}>
                 <div className="d-flex pb-3 mb-3 border-bottom tr-row align-items-center">
                     <div className="mr-auto pr-3">
-                        <h2 className="text-black fs-14">{title}
-                        <span> {increased}</span>
-                        </h2>
+                        <b className="text-black" style={{ fontSize: "16px", marginBottom: "0%" }}>{title}
+                            <span> {increased}</span>
+                        </b>
                         <ul>
                             <li className="fs-14 text-black">
                                 <strong className="mr-1">{`${Math.round(calories)}cal`}</strong>
@@ -90,7 +95,7 @@ function FavoriteRecipeCard({ title, img, calories, protein, carbs, fat, recipeS
                         src={`${img}`}
                         alt="menu9"
                         width={60}
-                        className="rounded"
+                        className="rounded image"
                     />
                 </div>
             </button>

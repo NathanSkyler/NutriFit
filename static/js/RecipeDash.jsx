@@ -43,8 +43,6 @@ function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
         }
     }, [userStatsCalories, dietType]);
 
-
-
     return (
         <div>
             <div className="card snipcss-jULXg">
@@ -52,22 +50,22 @@ function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
                     <div>
                         <h4 className="card-title mb-2">Recipes for you</h4>
                         <p className="fs-14 mb-0">These are given to you based on your daily intake</p>
-                        <ButtonGroup aria-label="diets">
-                            <Button variant="Anything" onClick={() => setDietType(" ")}><div className="icon-container">
-                                <i className="fa-solid fa-utensils fa-2xl"></i></div><div>Anything</div></Button>
-                            <Button variant="Paleo" onClick={() => setDietType("Paleo")}><div className="icon-container">
-                                <i className="fa-solid fa-drumstick-bite fa-2xl" style={{ color: '#4d3605' }}></i></div><div>Paleo</div></Button>
-                            <Button variant="Vegetarian" onClick={() => setDietType("Vegetarian")}><div className="icon-container">
-                                <i className="fa-solid fa-carrot fa-2xl" style={{ color: '#ff7b00' }}></i></div><div>Vegetarian</div></Button>
-                            <Button variant="Vegan" onClick={() => setDietType("Vegan")}><div className="icon-container">
-                                <i className="fa-solid fa-seedling fa-2xl" style={{ color: '#327b24' }}></i></div><div>Vegan</div></Button>
-                            <Button variant="Ketogenic" onClick={() => setDietType("Ketogenic")}><div className="icon-container">
-                                <i className="fa-solid fa-wheat-awn-circle-exclamation fa-2xl" style={{ color: '#af9e4b' }}></i></div><div>Ketogenic</div></Button>
-                            <Button variant="Mediterranean" onClick={() => setDietType("Pescetarian")}><div className="icon-container">
-                                <i className="fa-solid fa-fish-fins fa-2xl" style={{ color: '#dd7a1d' }}></i></div><div>Pescetarian</div></Button>
+                        <ButtonGroup aria-label="diets" className="dietgroup">
+                            <Button variant="Anything" onClick={() => setDietType(" ")}className={dietType === ' ' ? 'selected-button' : 'dietbutton'}><div className="icon-content"><div className="icon-container">
+                                <i className="fa-solid fa-utensils fa-2xl"></i></div><div>Anything</div></div></Button>
+                            <Button variant="Paleo" onClick={() => setDietType("Paleo")} className={dietType === 'Paleo' ? 'selected-button' : 'dietbutton'}><div className="icon-content"><div className="icon-container">
+                                <i className="fa-solid fa-drumstick-bite fa-2xl" style={{ color: '#4d3605' }}></i></div><div>Paleo</div></div></Button>
+                            <Button variant="Vegetarian" onClick={() => setDietType("Vegetarian")}className={dietType === 'Vegetarian' ? 'selected-button' : 'dietbutton'}><div className="icon-content"><div className="icon-container">
+                                <i className="fa-solid fa-carrot fa-2xl" style={{ color: '#ff7b00' }}></i></div><div>Vegetarian</div></div></Button>
+                            <Button variant="Vegan" onClick={() => setDietType("Vegan")}className={dietType === 'Vegan' ? 'selected-button' : 'dietbutton'}><div className="icon-content"><div className="icon-container">
+                                <i className="fa-solid fa-seedling fa-2xl" style={{ color: '#327b24' }}></i></div><div>Vegan</div></div></Button>
+                            <Button variant="Ketogenic" onClick={() => setDietType("Ketogenic")}className={dietType === 'Ketogenic' ? 'selected-button' : 'dietbutton'}><div className="icon-content"><div className="icon-container">
+                                <i className="fa-solid fa-wheat-awn-circle-exclamation fa-2xl" style={{ color: '#af9e4b' }}></i></div><div>Ketogenic</div></div></Button>
+                            <Button variant="Mediterranean" onClick={() => setDietType("Pescetarian")}className={dietType === 'Pescetarian' ? 'selected-button' : 'dietbutton'}><div className="icon-content"><div className="icon-container">
+                                <i className="fa-solid fa-fish-fins fa-2xl" style={{ color: '#dd7a1d' }}></i></div><div>Pescetarian</div></div></Button>
                         </ButtonGroup>
                     </div>
-                    <div className="card-action card-tabs mt-3 mt-3 mt-lg-0">
+                    <div className="card-action card-tabs mt-3 mt-3 mt-lg-0" style={{marginBottom:"80px"}}>
                         <Tabs
                             defaultActiveKey="profile"
                             id="uncontrolled-tab-example"
@@ -101,7 +99,7 @@ function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
                                         ))}
                                     </>
                                 ) : (
-                                    <div className="row">
+                                    <div className="row" style={{marginTop:"-44px"}}>
                                         {Object.keys(recipeInfo[foodType]).length > 0 && recipeInfo[foodType].map((info) => {
                                             return (
                                                 <div className="col-lg-6">
@@ -479,8 +477,8 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary,
     return (
 
         <div>
-            <button className="RecipeButton" onClick={handleShow}>
-                <div className="media mb-4 align-items-center">
+            <button className="RecipeSuggestionButton" onClick={handleShow}>
+                <div className="media mb-4 align-items-center" style={{marginTop:"22px"}}>
                     <img
                         className="rounded mr-3 food-img"
                         src={`${img}`}
@@ -488,9 +486,9 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary,
                     />
                     <div className="media-body">
                         <h5 className="mb-sm-4 mb-3">
-                            <a className="text-black">
+                            <b className="text-black">
                                 {formattedTitle}
-                            </a>
+                            </b>
                             <span> {increased}</span>
                         </h5>
                         <div className="d-flex mb-2">
@@ -512,17 +510,6 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary,
                                     Fat
                                 </li>
                             </ul>
-                        </div>
-                    </div>
-                    <div className="d-inline-block relative donut-chart-sale">
-                        <div className="donught-chart style-KW4gD" id="style-KW4gD">
-                            <canvas
-                                role="img"
-                                height={150}
-                                width={150}
-                                id="style-BfZ4o"
-                                className="style-BfZ4o"
-                            ></canvas>
                         </div>
                     </div>
                 </div>
@@ -547,7 +534,7 @@ function RecipeModal({ handleClose, show, title, image, calories, protein, carbs
 
     useEffect(() => {
         if (increase_amount > 0) {
-            setIncreaseAlert(<span>*Increase Ingredient amount by {increase_amount}%</span>)
+            setIncreaseAlert(<span style={{color:"rgb(234, 122, 154)"}}>*Increase Ingredient amount by {increase_amount}%</span>)
         }
     }, [increase_amount])
 
