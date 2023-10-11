@@ -31,12 +31,12 @@ def homepage():
 @app.route('/register', methods = ['POST'])
 def register_user():
     
-
     first_name = request.json.get("fname")
     last_name = request.json.get("lname")
     email = request.json.get("email")
     password = request.json.get("password")
     user = crud.get_user_by_email(email)
+    session["first_name"] = first_name
 
     if user:
         return {
@@ -53,7 +53,7 @@ def login():
     email = request.json.get("email")
     password = request.json.get("password")
     user = crud.get_user_by_email(email)
-
+    session["first_name"] = user.fname
     if user is None or password != user.password:
             return {
             "success": False, 
@@ -67,6 +67,13 @@ def logout():
     session.clear()
     return redirect('/')
 
+
+@app.route('/get_name')
+def get_name():
+    print("hello",session)
+    first_name = session.get("first_name", "")
+    return jsonify({'first_name': first_name})
+
 """User Stats"""
 
 @app.route('/update_stats', methods=['POST'])
@@ -79,10 +86,8 @@ def update_stats():
     fit_goal = request.json.get("fit_goal")
     weight_goal = request.json.get("weight_goal")
     user_id = crud.get_user_by_email(session["email"])
-
-
-
     user_stats = crud.get_user_stats_by_user_id(user_id.user_id)
+
     if user_stats:
         crud.update_user_stats(user_stats.stats_id, bday, height, weight, gender, activity_level, weight_goal, fit_goal)
     else:
@@ -128,10 +133,12 @@ def get_form_stats():
         return jsonify(user_stats_dict)
 
 
-@app.route('/get_recipes')
+@app.route('/get_recipes', methods=['POST','GET'])
 def get_recipes():
         user = crud.get_user_by_email(session["email"])
         user_stats = crud.get_user_stats_by_user_id(user.user_id)
+        dietType = request.json.get("dietType")
+        print(dietType)
 
         if user_stats:
             percent_range = calculate_percent_range(user_stats.calorie_intake,
@@ -139,10 +146,10 @@ def get_recipes():
                                     user_stats.carbs_intake, 
                                     user_stats.fat_intake)
 
-            breakfast_recipes = get_recipes_api('breakfast', percent_range['breakfast'])
-            # lunch_recipes = get_recipes_api('main course', percent_range['lunch'])
-            # dinner_recipes = get_recipes_api('main course', percent_range['dinner'])
-            # snack_recipes = get_recipes_api('snack', percent_range['snack'])
+            breakfast_recipes = get_recipes_api('breakfast', percent_range['breakfast'], dietType, 0)
+            # lunch_recipes = get_recipes_api('main course', percent_range['lunch'], dietType, 0)
+            # dinner_recipes = get_recipes_api('main course', percent_range['dinner'],dietType, 6)
+            # snack_recipes = get_recipes_api('snack', percent_range['snack'], dietType, 0)
 
             formatted_recipes = {
                 'breakfast': format_recipe(breakfast_recipes, user.user_id, percent_range['breakfast'] ),
@@ -194,7 +201,6 @@ def get_yelp_results():
     user_latitude = request.json.get("latitude")
     user_longitude = request.json.get("longitude")
     zipcode = request.json.get('zipCode')
-    print("hello",zipcode)
 
     if user_latitude == None:
         geolocator = Nominatim(user_agent="zipcode_to_coords")

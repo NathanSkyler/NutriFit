@@ -2023,6 +2023,36 @@ h2 {
 	font-size: 1.875rem;
 }
 
+.spinner-border {
+	width: 3rem;
+	height: 3rem;
+	border: 0.4em solid white;
+	border-top-color: transparent;
+	border-radius: 50%;
+	margin-left: 40%;
+}
+
+/* Placeholder Style */
+@keyframes gradientAnimation {
+	0% {
+		background-position: 100% 0%;
+	}
+
+	100% {
+		background-position: -100% 0%;
+	}
+}
+
+.placeholder.btn {
+	height: 159px;
+	background: linear-gradient(90deg, #ff8a00, #e52e71, #ff8a00);
+	background-size: 200% 100%;
+	animation: gradientAnimation 3s linear infinite;
+	color: #fff;
+	border: none;
+	max-width: 69%;
+}
+
 /* Recipe Dash Styles */
 body {
 	font-family: 'poppins', sans-serif;
@@ -3316,7 +3346,7 @@ html {
 	position: relative;
 	border: 0px solid transparent;
 	border-radius: 1.25rem;
-	box-shadow: 0px 12px 23px 0px rgba(62, 63, 122, 0.04);
+	box-shadow: 0px 12px 23px 0px #7e7e7e;
 	height: calc(100% - 30px);
 }
 
@@ -3637,7 +3667,8 @@ svg {
 }
 
 .RecipeDash {
-	max-width: 60%
+	max-width: 60%;
+	width: 60%;
 }
 
 .Favorites {
@@ -3652,7 +3683,7 @@ svg {
 
 /* Restuarants View CSS */
 .selected {
-	background-color: #f0f0f0;
+	transform: scale(1.05);
 }
 
 .restaurantView {
@@ -3672,7 +3703,7 @@ iframe {
 }
 
 .card.restaurants-results {
-	max-height: 845px;
+	max-height: 795px;
 	overflow-y: auto;
 }
 
@@ -3753,4 +3784,84 @@ iframe {
 .icon-container:hover .icon-window {
 	display: block;
 	opacity: 1;
+}
+
+/* Alert Styles */
+@keyframes flashalert {
+
+	0%,
+	100% {
+		transform: scale(1);
+	}
+
+	50% {
+		transform: scale(1.1);
+	}
+}
+
+.flash-alert {
+	animation: flashalert 2s infinite;
+}
+
+.flash-alert {
+	opacity: 1;
+}
+
+.card.trending-menus {
+	height: 795px;
+}
+
+.card.snipcss-jULXg {
+	height: 795px
+}
+
+#map {
+	height: 715px;
+	width: 102%;
+	position: relative;
+	box-shadow: 6px 8px 5px #7e7e7e;
+	overflow: hidden;
+	border-radius: 10px;
+}
+
+.RestaurantButton {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	justify-content: center;
+	text-align: center;
+	padding: 10px 20px;
+	border-image-slice: 1;
+	border-radius: 10px;
+	margin-bottom: 2%;
+	background: linear-gradient(to right, #edc6b7, #d15469);
+	font-family: Arial, sans-serif;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+	width: 100%;
+
+	&:hover {
+		transform: scale(1.05);
+	}
+
+}
+
+.card-headerview {
+	position: fixed;
+	background-color: white;
+	z-index: 2;
+	width: 21.5%;
+	padding: 1.5rem 1.875rem 1.25rem;
+}
+
+.restaurant {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.restaurant.img {
+	border-radius: 16px;
+	width: 110px;
+	max-height: 93px;
 }

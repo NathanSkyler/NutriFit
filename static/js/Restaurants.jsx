@@ -1,8 +1,11 @@
+const { useEffect } = require("react");
+
 function RestaurantView() {
     const [yelpData, setYelpData] = useState([]);
     const [userLocation, setUserLocation] = useState(null);
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
     const [zipCode, setZipCode] = useState(null);
+    
 
 
     useEffect(() => {
@@ -170,13 +173,13 @@ function Restaurants({ yelpData, selectedRestaurant, setSelectedRestaurant }) {
     return (
         <div>
             <div className="card restaurants-results">
-                <div className="card-header d-sm-flex d-block pb-0 border-0">
+                <div className="card-headerview d-sm-flex d-block pb-0 border-0">
                     <div>
                         <h4 className="text-black fs-20">Healthy Restaurants</h4>
                         <p className="fs-13 mb-0 text-black">Scroll to see more!</p>
                     </div>
                 </div>
-                <div className="card-body dz-scroll" id="dailyMenus">
+                <div className="card-body dz-scroll" style={{marginTop: '12%', minWidth: "552px", minHeight:"715px"}} id="dailyMenus">
                     {Array.isArray(yelpData) && yelpData.map((restaurant) => (
                         <div className={`restaurants ${selectedRestaurant &&
                             selectedRestaurant.Id === restaurant.Id ? 'selected' : ''}`} key={restaurant.Id} data-restaurant-id={restaurant.Id} onClick={() => handleRestaurantCardClick(restaurant)}>
@@ -207,9 +210,10 @@ function RestaurantCard({ key, name, address, categories, imageUrl, rating, url 
     return (
         <div>
             <button className="RestaurantButton" onClick={handleShow}>
-                <div className="d-flex pb-3 mb-3 border-bottom tr-row align-items-center">
-                    <div className="{id}">
-                        <h2 className="text-black fs-14">{name}</h2>
+                <div className="RestaurantInfo d-flex pb-3 mb-3 border-bottom tr-row align-items-center" style={{width:"100%"}}>
+                    <div className="restaurant" >
+                        <div>
+                        <b className="text-black" style={{fontSize:"20px"}}>{name}</b>
                         <ul>
                             <li className="fs-14 text-black">
                                 <strong className="mr-1">{address}</strong>
@@ -223,13 +227,14 @@ function RestaurantCard({ key, name, address, categories, imageUrl, rating, url 
                                 Star Rating
                             </li>
                         </ul>
-                    </div>
+                        </div>
                     <img
                         src={`${imageUrl}`}
                         alt="menu9"
                         width={60}
-                        className="rounded"
+                        className="restaurant img"
                     />
+                    </div>
                 </div>
             </button>
             {show && <RestaurantModal handleClose={handleClose} show={show} url={url}

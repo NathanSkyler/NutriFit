@@ -3,7 +3,7 @@ import os
 from stats_calculations import calculate_percent_range
 from crud import check_if_meal_saved
 
-def get_recipes_api(meal_type, macro_range):
+def get_recipes_api(meal_type, macro_range, dietType, offset):
 
     api_key = os.environ.get('apiKey')
 
@@ -24,7 +24,9 @@ def get_recipes_api(meal_type, macro_range):
         'instructionsRequired': True,
         'fillIngredients': True,
         'number': 6,
-        'sort': 'healthiness'
+        'diet': dietType,
+        'sort': 'healthiness',
+        'offset': offset
     }
 
     response = requests.get(url, params=payload)

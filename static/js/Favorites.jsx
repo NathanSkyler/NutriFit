@@ -53,7 +53,7 @@ function FavoriteRecipeCard({ title, img, calories, protein, carbs, fat, recipeS
     useEffect(() => {
         if (increaseAmount > 0) {
             setIncreased(<div className="icon-container">
-                <i className="fa-solid fa-clipboard-list fa-bounce fa-lg" style={{ color: '#ed4666' }}></i>
+                <i className="fa-solid fa-clipboard-list fa-lg" style={{ color: '#ed4666' }}></i>
                 <div className="icon-window">Modified to meet your dietary requirements!</div>
             </div>)
         }

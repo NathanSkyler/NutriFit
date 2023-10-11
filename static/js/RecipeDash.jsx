@@ -1,5 +1,8 @@
 const Tab = ReactBootstrap.Tab
 const Tabs = ReactBootstrap.Tabs
+const Button = ReactBootstrap.Button
+const ButtonGroup = ReactBootstrap.ButtonGroup
+const Placeholder = ReactBootstrap.Placeholder
 
 function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
     const [recipeInfo, setRecipeInfo] = useState({
@@ -9,23 +12,38 @@ function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
         'snack': {}
     })
 
-    const [foodType, setFoodtype] = useState('breakfast')
+    const [foodType, setFoodtype] = useState('breakfast');
+    const [dietType, setDietType] = useState(' ');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const dietData = {
+            dietType: dietType
+        }
         if (userStatsCalories > 0) {
-            fetch('/get_recipes')
+            fetch('/get_recipes', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(dietData)
+            })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data)
                     setRecipeInfo((prevRecipeInfo) => {
                         return {
                             ...prevRecipeInfo,
                             ...data
                         };
                     });
+                })
+                .finally(() => {
+                    setLoading(false)
                 });
         }
-    }, [userStatsCalories]);
+    }, [userStatsCalories, dietType]);
+
+
 
     return (
         <div>
@@ -33,8 +51,21 @@ function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
                 <div className="card-header border-0 pb-2 d-lg-flex flex-wrap d-block">
                     <div>
                         <h4 className="card-title mb-2">Recipes for you</h4>
-
                         <p className="fs-14 mb-0">These are given to you based on your daily intake</p>
+                        <ButtonGroup aria-label="diets">
+                            <Button variant="Anything" onClick={() => setDietType(" ")}><div className="icon-container">
+                                <i className="fa-solid fa-utensils fa-2xl"></i></div><div>Anything</div></Button>
+                            <Button variant="Paleo" onClick={() => setDietType("Paleo")}><div className="icon-container">
+                                <i className="fa-solid fa-drumstick-bite fa-2xl" style={{ color: '#4d3605' }}></i></div><div>Paleo</div></Button>
+                            <Button variant="Vegetarian" onClick={() => setDietType("Vegetarian")}><div className="icon-container">
+                                <i className="fa-solid fa-carrot fa-2xl" style={{ color: '#ff7b00' }}></i></div><div>Vegetarian</div></Button>
+                            <Button variant="Vegan" onClick={() => setDietType("Vegan")}><div className="icon-container">
+                                <i className="fa-solid fa-seedling fa-2xl" style={{ color: '#327b24' }}></i></div><div>Vegan</div></Button>
+                            <Button variant="Ketogenic" onClick={() => setDietType("Ketogenic")}><div className="icon-container">
+                                <i className="fa-solid fa-wheat-awn-circle-exclamation fa-2xl" style={{ color: '#af9e4b' }}></i></div><div>Ketogenic</div></Button>
+                            <Button variant="Mediterranean" onClick={() => setDietType("Pescetarian")}><div className="icon-container">
+                                <i className="fa-solid fa-fish-fins fa-2xl" style={{ color: '#dd7a1d' }}></i></div><div>Pescetarian</div></Button>
+                        </ButtonGroup>
                     </div>
                     <div className="card-action card-tabs mt-3 mt-3 mt-lg-0">
                         <Tabs
@@ -62,31 +93,40 @@ function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
                             aria-hidden="false"
                             className="fade tab-pane fade tab-pane active show"
                         >
-                            <div className="row">
-
-                                {Object.keys(recipeInfo[foodType]).length > 0 && recipeInfo[foodType].map((info) => {
-                                    return (
-                                        <div className="col-lg-6">
-                                            <RecipeCard
-                                                key={info.id}
-                                                title={info.Title}
-                                                img={info.Image}
-                                                calories={info.Calories}
-                                                protein={info.Protein}
-                                                carbs={info.Carbohydrates}
-                                                fat={info.Fat}
-                                                recipeSummary={info.RecipeSummary}
-                                                ingredients={info.Ingredients.map((ingredient) => ingredient.original)}
-                                                increase_amount={info.IncreaseIngredientsAmount}
-                                                instructions={info.Instructions.map((steps) => steps.step)}
-                                                recipe_id={info.RecipeID}
-                                                meal_type={foodType}
-                                                user_saved={info.UserSaved}
-                                                fetchSavedRecipes={fetchSavedRecipes}
-                                            />
-                                        </div>
-                                    );
-                                })}
+                            <div>
+                                {loading ? (
+                                    <>
+                                        {Array.from({ length: 3 }).map((_, index) => (
+                                            <PlaceholderAnimation key={index} />
+                                        ))}
+                                    </>
+                                ) : (
+                                    <div className="row">
+                                        {Object.keys(recipeInfo[foodType]).length > 0 && recipeInfo[foodType].map((info) => {
+                                            return (
+                                                <div className="col-lg-6">
+                                                    <RecipeCard
+                                                        key={info.id}
+                                                        title={info.Title}
+                                                        img={info.Image}
+                                                        calories={info.Calories}
+                                                        protein={info.Protein}
+                                                        carbs={info.Carbohydrates}
+                                                        fat={info.Fat}
+                                                        recipeSummary={info.RecipeSummary}
+                                                        ingredients={info.Ingredients.map((ingredient) => ingredient.original)}
+                                                        increase_amount={info.IncreaseIngredientsAmount}
+                                                        instructions={info.Instructions.map((steps) => steps.step)}
+                                                        recipe_id={info.RecipeID}
+                                                        meal_type={foodType}
+                                                        user_saved={info.UserSaved}
+                                                        fetchSavedRecipes={fetchSavedRecipes}
+                                                    />
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
                             </div>
 
                         </div>
@@ -208,7 +248,6 @@ function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
                                     <div className="media mb-4 align-items-center">
                                         <img
                                             className="rounded mr-3 food-img"
-                                            ///demo/static/media/pic9.caa7db1011fab0d40c82.//"
                                             alt="card_pic9"
                                         />
                                         <div className="media-body">
@@ -295,75 +334,8 @@ function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
                                     <div className="media mb-4 align-items-center">
                                         <img
                                             className="rounded mr-3 food-img"
-                                            ///demo/static/media/pic8.3b1f317a5d1fc339cc2e.//"
                                             alt="card_pic8"
                                         />
-                                        <div className="media-body">
-                                            <h5 className="mb-sm-4 mb-3">
-                                                <a
-                                                    className="text-black"
-                                                    href="/react/demo/analytics/ecom-product-detail"
-                                                >
-                                                    Extreme Deluxe Pizza Super With Mozarella
-                                                </a>
-                                            </h5>
-                                            <div className="d-flex mb-2">
-                                                <svg
-                                                    className="mr-2"
-                                                    width={15}
-                                                    height={15}
-                                                    viewBox="0 0 15 15"
-                                                    fill="none"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <rect
-                                                        x="0.500488"
-                                                        width="2.04545"
-                                                        height={15}
-                                                        rx="1.02273"
-                                                        fill="#EA7A9A"
-                                                    ></rect>
-                                                    <rect
-                                                        x="4.59131"
-                                                        y="4.09082"
-                                                        width="2.04545"
-                                                        height="10.9091"
-                                                        rx="1.02273"
-                                                        fill="#EA7A9A"
-                                                    ></rect>
-                                                    <rect
-                                                        x="8.68213"
-                                                        y="10.2271"
-                                                        width="2.04545"
-                                                        height="4.77273"
-                                                        rx="1.02273"
-                                                        fill="#EA7A9A"
-                                                    ></rect>
-                                                    <rect
-                                                        x="12.7729"
-                                                        y="2.04541"
-                                                        width="2.04545"
-                                                        height="12.9545"
-                                                        rx="1.02273"
-                                                        fill="#EA7A9A"
-                                                    ></rect>
-                                                </svg>
-                                                <span className="fs-14 text-black">
-                                                    <strong className="mr-1">2,441</strong>
-                                                    Total Sales
-                                                </span>
-                                            </div>
-                                            <div className="star-review2 d-flex align-items-center flex-wrap fs-12">
-                                                <div className="mb-2">
-                                                    <i className="fa fa-star text-orange"></i>
-                                                    <i className="fa fa-star text-orange"></i>
-                                                    <i className="fa fa-star text-orange"></i>
-                                                    <i className="fa fa-star text-gray"></i>
-                                                    <i className="fa fa-star text-gray"></i>
-                                                </div>
-                                                <span className="ml-3 text-dark mb-2">(454 revies)</span>
-                                            </div>
-                                        </div>
                                         <div className="d-inline-block relative donut-chart-sale">
                                             <div className="donught-chart style-4Vxnm" id="style-4Vxnm">
                                                 <canvas
@@ -477,44 +449,6 @@ function RecipeDash({ userStatsCalories, fetchSavedRecipes }) {
                     </div>
                 </div>
                 <div className="card-footer border-0">
-                    <nav>
-                        <ul className="pagination style-1 mb-0">
-                            <li className="page-item page-indicator">
-                                <a className="page-link" href="/react/demo/analytics">
-                                    <i className="la la-angle-left"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <ul>
-                                    <li className="page-item active">
-                                        <a className="page-link" href="/react/demo/analytics">
-                                            1
-                                        </a>
-                                    </li>
-                                    <li className="page-item">
-                                        <a className="page-link" href="/react/demo/analytics">
-                                            2
-                                        </a>
-                                    </li>
-                                    <li className="page-item">
-                                        <a className="page-link" href="/react/demo/analytics">
-                                            3
-                                        </a>
-                                    </li>
-                                    <li className="page-item">
-                                        <a className="page-link" href="/react/demo/analytics">
-                                            4
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="page-item page-indicator">
-                                <a className="page-link" href="/react/demo/analytics">
-                                    <i className="la la-angle-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
                 </div>
             </div>
         </div>
@@ -536,7 +470,7 @@ function RecipeCard({ title, img, calories, protein, carbs, fat, recipeSummary,
     useEffect(() => {
         if (increase_amount > 0) {
             setIncreased(<div className="icon-container">
-                <i className="fa-solid fa-clipboard-list fa-bounce fa-lg" style={{ color: '#ed4666' }}></i>
+                <i className="fa-solid fa-clipboard-list fa-lg" style={{ color: '#ed4666' }}></i>
                 <div className="icon-window">Modified to meet your dietary requirements!</div>
             </div>)
         }
@@ -772,4 +706,53 @@ function RecipeModal({ handleClose, show, title, image, calories, protein, carbs
             </Modal>
         </>
     );
+}
+
+function PlaceholderAnimation() {
+    return (
+        <div className="row">
+            <div className="col-lg-6">
+                <div className="row" style={{marginTop:'-8%'}}>
+                    <div className="col-lg-6">
+                        <Placeholder.Button variant="primary" xs={12} style={{ backgroundColor: '#EA7A9A', borderColor: '#EA7A9A' }} />
+                    </div>
+                    <div className="col-lg-6" style={{margin: '-124px', marginTop: '9px'}}>
+                        <Placeholder as={Card.Title} animation="glow">
+                            <Placeholder xs={12} />
+                        </Placeholder>
+                        <Placeholder as={Card.Text} animation="glow">
+                            <Placeholder xs={6} /> {' '}
+                            <div><Placeholder xs={3} />{' '}
+                            </div>
+                            <div>
+                                <Placeholder xs={6} /> {' '}
+                            </div>
+                            <Placeholder xs={3} />{' '}
+                        </Placeholder>
+                    </div>
+                </div>
+            </div>
+            <div className="col-lg-6">
+                <div className="row"style={{marginTop:'-8%'}}>
+                    <div className="col-lg-6">
+                        <Placeholder.Button variant="primary" xs={12} style={{ backgroundColor: '#EA7A9A', borderColor: '#EA7A9A' }} />
+                    </div>
+                    <div className="col-lg-6" style={{margin: '-124px', marginTop: '9px'}}>
+                        <Placeholder as={Card.Title} animation="glow">
+                            <Placeholder xs={12} />
+                        </Placeholder>
+                        <Placeholder as={Card.Text} animation="glow">
+                            <Placeholder xs={6} /> {' '}
+                            <div><Placeholder xs={3} />{' '}
+                            </div>
+                            <div>
+                                <Placeholder xs={6} /> {' '}
+                            </div>
+                            <Placeholder xs={3} />{' '}
+                        </Placeholder>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 }
